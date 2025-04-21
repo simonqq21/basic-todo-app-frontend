@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
+  // runApp(
+  //   ChangeNotifierProvider(
+  //     create: (context) => TodoContext(),
+  //     child: const MyApp(),
+  //   ),
+  // );
   runApp(MyApp());
 }
+
+class TodoContext with ChangeNotifier {}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -55,8 +64,6 @@ class TodoAppHomePage extends StatefulWidget {
 }
 
 class _TodoAppHomePageState extends State<TodoAppHomePage> {
-  List<String>? items = List<String>.generate(1000, (i) => 'Item $i');
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,98 +73,7 @@ class _TodoAppHomePageState extends State<TodoAppHomePage> {
         title: Center(child: Text("Simonqq21's todo app")),
       ),
 
-      body: Center(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Centered text inside column"),
-            // Column(children: [Text("a"), Text('b'), Text('c')]),
-            // Column(children: [Text("d"), Text('e'), Text('f')]),
-            // Column(children: [Text("g"), Text('h'), Text('i')]),
-            // ListView(
-            //   children: [Text("item 1000"), Text("Item 2"), Text("item 3")],
-            // ),
-            Container(
-              // alignment: Alignment.center,
-              height: 600,
-              child: ListView.builder(
-                itemCount: items!.length,
-                prototypeItem: Container(
-                  alignment: Alignment.center,
-                  width: 50.0,
-                  color: Colors.blue,
-                  child: Text(items!.first),
-                ),
-                itemBuilder: (context, index) {
-                  return Container(
-                    alignment: Alignment.center,
-                    width: 50.0,
-                    color: Colors.blue,
-                    child: Text(items![index]),
-                  );
-                },
-                // padding: const EdgeInsets.fromLTRB(50, 25, 50, 50),
-                // children: [
-                //   Container(
-                //     alignment: Alignment.center,
-                //     width: 50.0,
-                //     color: Colors.blue,
-                //     child: Text("item 1"),
-                //   ),
-                //   Container(
-                //     alignment: Alignment.center,
-                //     width: 50.0,
-                //     color: Colors.blue,
-                //     child: Text("item 2"),
-                //   ),
-                //   Container(
-                //     alignment: Alignment.center,
-                //     width: 50.0,
-                //     color: Colors.blue,
-                //     child: Text("item 3"),
-                //   ),
-                // ],
-              ),
-            ),
-            // Flexible(
-            //   child: ListView(
-            //     padding: const EdgeInsets.fromLTRB(50, 25, 50, 50),
-            //     children: [
-            //       Container(
-            //         width: 50.0,
-            //         color: Colors.blue,
-            //         child: Text("item 1"),
-            //       ),
-            //       Container(
-            //         width: 50.0,
-            //         color: Colors.blue,
-            //         child: Text("item 2"),
-            //       ),
-            //       Container(
-            //         width: 50.0,
-            //         color: Colors.blue,
-            //         child: Text("item 3"),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
-            // SizedBox(
-            //   height: 500,
-            //   width: 400,
-            //   child: ListView(
-            //     children: [Text("item 1"), Text("Item 2"), Text("item 3")],
-            //   ),
-            // ),
-          ],
-          //   children: [
-          //                 // Text("list of todos:"),
-          // ListView(
-          //   children: [Text("item 1"), Text("Item 2"), Text("item 3")],
-          // ),
-          //   ],
-        ),
-      ),
+      body: TodoListPage(),
 
       bottomNavigationBar: BottomAppBar(
         color: Colors.blue.shade400,
@@ -238,11 +154,68 @@ class _TodoAppHomePageState extends State<TodoAppHomePage> {
   // }
 }
 
-// class TodoListItem extends StatelessWidget {
-//   const TodoListItem({super.key});
+class TodoListPage extends StatelessWidget {
+  final List<String> items = List<String>.generate(100, (i) => 'Item $i');
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    // return TodoViewEditPage();
+    return Center(
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Centered text inside column"),
+          // Column(children: [Text("a"), Text('b'), Text('c')]),
+          // Column(children: [Text("d"), Text('e'), Text('f')]),
+          // Column(children: [Text("g"), Text('h'), Text('i')]),
+          // ListView(
+          //   children: [Text("item 1000"), Text("Item 2"), Text("item 3")],
+          // ),
+          SizedBox(
+            // alignment: Alignment.center,
+            height: 600,
+            width: 600,
+            child: ListView.builder(
+              itemCount: items.length,
+              prototypeItem: TodoListItem(text: items.first),
+              itemBuilder: (context, index) {
+                return TodoListItem(text: items[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TodoViewEditPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter a search term',
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TodoListItem extends StatelessWidget {
+  final String text;
+  const TodoListItem({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      width: 50.0,
+      color: Colors.blue,
+      child: Text(text),
+    );
+  }
+}
