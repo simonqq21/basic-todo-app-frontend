@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -55,6 +55,8 @@ class TodoAppHomePage extends StatefulWidget {
 }
 
 class _TodoAppHomePageState extends State<TodoAppHomePage> {
+  List<String>? items = List<String>.generate(1000, (i) => 'Item $i');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,17 +68,79 @@ class _TodoAppHomePageState extends State<TodoAppHomePage> {
 
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text("Centered text inside column"),
             // Column(children: [Text("a"), Text('b'), Text('c')]),
             // Column(children: [Text("d"), Text('e'), Text('f')]),
             // Column(children: [Text("g"), Text('h'), Text('i')]),
-            Expanded(
-              child: ListView(
-                children: [Text("item 1"), Text("Item 2"), Text("item 3")],
+            // ListView(
+            //   children: [Text("item 1000"), Text("Item 2"), Text("item 3")],
+            // ),
+            Container(
+              // alignment: Alignment.center,
+              height: 600,
+              child: ListView.builder(
+                itemCount: items!.length,
+                prototypeItem: Container(
+                  alignment: Alignment.center,
+                  width: 50.0,
+                  color: Colors.blue,
+                  child: Text(items!.first),
+                ),
+                itemBuilder: (context, index) {
+                  return Container(
+                    alignment: Alignment.center,
+                    width: 50.0,
+                    color: Colors.blue,
+                    child: Text(items![index]),
+                  );
+                },
+                // padding: const EdgeInsets.fromLTRB(50, 25, 50, 50),
+                // children: [
+                //   Container(
+                //     alignment: Alignment.center,
+                //     width: 50.0,
+                //     color: Colors.blue,
+                //     child: Text("item 1"),
+                //   ),
+                //   Container(
+                //     alignment: Alignment.center,
+                //     width: 50.0,
+                //     color: Colors.blue,
+                //     child: Text("item 2"),
+                //   ),
+                //   Container(
+                //     alignment: Alignment.center,
+                //     width: 50.0,
+                //     color: Colors.blue,
+                //     child: Text("item 3"),
+                //   ),
+                // ],
               ),
             ),
+            // Flexible(
+            //   child: ListView(
+            //     padding: const EdgeInsets.fromLTRB(50, 25, 50, 50),
+            //     children: [
+            //       Container(
+            //         width: 50.0,
+            //         color: Colors.blue,
+            //         child: Text("item 1"),
+            //       ),
+            //       Container(
+            //         width: 50.0,
+            //         color: Colors.blue,
+            //         child: Text("item 2"),
+            //       ),
+            //       Container(
+            //         width: 50.0,
+            //         color: Colors.blue,
+            //         child: Text("item 3"),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             // SizedBox(
             //   height: 500,
