@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   // runApp(
@@ -11,55 +11,102 @@ void main() {
   runApp(MyApp());
 }
 
+final _router = GoRouter(
+  routes: <GoRoute>[
+    GoRoute(path: '/', builder: (context, state) => HomePage()),
+    GoRoute(path: '/todo', builder: (context, state) => SingleTodoPage()),
+  ],
+);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Simonqq21's todo app",
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-      ),
-      home: HomePage(),
-      // routes: <String, WidgetBuilder>{
-      //   '/todos': (BuildContext context) {
-      //     return Scaffold(
-      //       body: Center(
-      //         child: Text("Hello world from route /todos"),
-      //       ),
-      //     );
-      //   },
-      //   '/': (BuildContext context) {
-      //     return Scaffold(
-      //       body: Center(
-      //         child: Text("Route /"),
-      //       ),
-      //     );
-      //   }, 
-      // },
-      // initialRoute: '/todos',
-      // );
-    // } 
-    );
+    return MaterialApp.router(routerConfig: _router);
+    //   return MaterialApp(
+    //     title: "Simonqq21's todo app",
+    //     theme: ThemeData(
+    //       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+    //     ),
+    //     // home: HomePage(),
+    //     home: SingleTodoPage(),
+    //     // routes: <String, WidgetBuilder>{
+    //     //   '/todos': (BuildContext context) {
+    //     //     return Scaffold(
+    //     //       body: Center(
+    //     //         child: Text("Hello world from route /todos"),
+    //     //       ),
+    //     //     );
+    //     //   },
+    //     //   '/': (BuildContext context) {
+    //     //     return Scaffold(
+    //     //       body: Center(
+    //     //         child: Text("Route /"),
+    //     //       ),
+    //     //     );
+    //     //   },
+    //     // },
+    //     // initialRoute: '/todos',
+    //     // );
+    //     // }
+    //   );
   }
 }
 
 // class for viewing a list of all todos paginated
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("hOME ROUTE"),
+        child: Column(
+          children: [
+            Text("Home page"),
+            ElevatedButton(
+              onPressed: () => context.go('/todo'),
+              child: const Text('Go to the todos screen'),
+            ),
+          ],
+        ),
       ),
     );
-  } 
+  }
 }
 
-// class for viewing a single todo 
-// class View1
-
+// class for viewing a single todo
+/**
+ * title
+ * id
+ * written_by
+ * completed
+ * body
+ */
+class SingleTodoPage extends StatelessWidget {
+  const SingleTodoPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Text("Single Todo View Edit Page"),
+          TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: '',
+            ),
+            enabled: true,
+          ),
+          ElevatedButton(
+            onPressed: () => context.go('/'),
+            child: const Text('Go to the home screen'),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});
@@ -233,22 +280,6 @@ class HomePage extends StatelessWidget {
 //           ),
 //         ],
 //       ),
-//     );
-//   }
-// }
-
-// class TodoViewEditPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         TextField(
-//           decoration: InputDecoration(
-//             border: OutlineInputBorder(),
-//             hintText: 'Enter a search term',
-//           ),
-//         ),
-//       ],
 //     );
 //   }
 // }
