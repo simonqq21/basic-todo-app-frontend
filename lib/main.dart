@@ -77,7 +77,9 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            TodoTableHeader(),
+            TodoTableHeaderBar(),
+            TodoListView(),
+            PaginationFooter(),
             // Text("Home page"),
             // ElevatedButton(
             //   onPressed: () => context.go('/todo'),
@@ -95,12 +97,67 @@ class HomePage extends StatelessWidget {
   }
 }
 
+class TodoTableHeaderBar extends StatelessWidget {
+  const TodoTableHeaderBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(spacing: 0, children: [ActionButtonBar(), TodoTableHeader()]);
+  }
+}
+
+class ActionButtonBar extends StatefulWidget {
+  @override
+  State<ActionButtonBar> createState() => _ActionButtonBarState();
+}
+
+class _ActionButtonBarState extends State<ActionButtonBar> {
+  var selectAllBtnVisibility = true;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          // style: ButtonStyle(
+          //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
+          //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+          // ),
+          onPressed: () {
+            logger.i("Select pressed");
+            setState(() {
+              selectAllBtnVisibility = !selectAllBtnVisibility;
+            });
+          },
+          child: Text("Select"),
+        ),
+        Visibility(
+          visible: selectAllBtnVisibility,
+          child: TextButton(
+            onPressed: () => {logger.i("Select All pressed")},
+            child: Text("Select All"),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class TodoTableHeader extends StatelessWidget {
   const TodoTableHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(height: 100, width: 100, color: Colors.green);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        // Container(width: 100, height: 50, color: Colors.green),
+        // Container(width: 100, height: 50, color: Colors.red),
+        Text("Modified"),
+        Text("Title"),
+        Text("Completed"),
+      ],
+    );
   }
 }
 
@@ -130,6 +187,34 @@ class SingleTodoPage extends StatelessWidget {
   }
 }
 
+class TodoListView extends StatelessWidget {
+  const TodoListView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 500,
+      width: 1000,
+      child: ListView(children: [Text("Todo Listview")]),
+    );
+  }
+}
+
+class PaginationFooter extends StatelessWidget {
+  const PaginationFooter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_back)),
+        Text("Page 1 of 10"),
+        IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_forward)),
+      ],
+    );
+  }
+}
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});
 
