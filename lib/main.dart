@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
+
+final logger = Logger(
+  printer: PrettyPrinter(
+    methodCount: 2, // Number of method calls to be displayed
+    errorMethodCount: 8, // Number of method calls if stacktrace is provided
+    lineLength: 120, // Width of the output
+    colors: true, // Colorful log messages
+    printEmojis: true, // Print an emoji for each log message
+    // Should each log print contain a timestamp
+    dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+  ),
+);
 
 void main() {
-  // runApp(
-  //   ChangeNotifierProvider(
-  //     create: (context) => TodoContext(),
-  //     child: const MyApp(),
-  //   ),
-  // );
   runApp(MyApp());
 }
 
@@ -23,7 +30,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: _router);
+    return MaterialApp.router(
+      routerConfig: _router,
+      title: "Simonqq21's todo app",
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+      ),
+    );
     //   return MaterialApp(
     //     title: "Simonqq21's todo app",
     //     theme: ThemeData(
@@ -60,29 +73,38 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Center(child: Text("Simonqq21's todo app yeehaw"))),
       body: Center(
         child: Column(
           children: [
-            Text("Home page"),
-            ElevatedButton(
-              onPressed: () => context.go('/todo'),
-              child: const Text('Go to the todos screen'),
-            ),
+            TodoTableHeader(),
+            // Text("Home page"),
+            // ElevatedButton(
+            //   onPressed: () => context.go('/todo'),
+            //   child: const Text('Go to the todos screen'),
+            // ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => logger.d("add todo button pressed"),
+        tooltip: "create a todo",
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-// class for viewing a single todo
-/**
- * title
- * id
- * written_by
- * completed
- * body
- */
+class TodoTableHeader extends StatelessWidget {
+  const TodoTableHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(height: 100, width: 100, color: Colors.green);
+  }
+}
+
+/// class for viewing a single todo
 class SingleTodoPage extends StatelessWidget {
   const SingleTodoPage({super.key});
   @override
