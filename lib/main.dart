@@ -187,16 +187,82 @@ class SingleTodoPage extends StatelessWidget {
   }
 }
 
-class TodoListView extends StatelessWidget {
+class TodoListView extends StatefulWidget {
   const TodoListView({super.key});
 
   @override
+  State<StatefulWidget> createState() => _TodoListViewState();
+}
+
+class _TodoListViewState extends State<TodoListView> {
+  var todoItems = [
+    {
+      'index': 0,
+      'title': "My first todo",
+      'date_modified': DateTime(2022, 1, 2, 12, 0, 0),
+    },
+    {
+      'index': 1,
+      'title': "My second todo",
+      'date_modified': DateTime(2023, 1, 2, 12, 0, 0),
+    },
+    {
+      'index': 2,
+      'title': "My third todo",
+      'date_modified': DateTime(2024, 1, 2, 12, 0, 0),
+    },
+    {
+      'index': 3,
+      'title': "My fourth todo",
+      'date_modified': DateTime(2025, 1, 2, 12, 0, 0),
+    },
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 500,
-      width: 1000,
-      child: ListView(children: [Text("Todo Listview")]),
+    return Flexible(
+      fit: FlexFit.tight,
+      child: ListView.builder(
+        itemCount: todoItems.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+              color: Colors.pink,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(todoItems[index]["index"].toString()),
+                  SizedBox(width: 100),
+                  Text(todoItems[index]["title"] as String),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+      // child: ListView(
+      //   children: [
+      //     Text("Todo Listview"),
+      //     for (var todoItem in todoItems)
+
+      //   ],
+      // ),
     );
+    // return SizedBox(
+    //   height: 500,
+    //   width: 600,
+    //   child: ListView(
+    //     children: [
+    //       Text("Todo Listview"),
+    //       for (var todoItem in todoItems)
+    //         ListTile(
+    //           leading: Text(todoItem["index"].toString()),
+    //           title: Text((todoItem["title"] as String)),
+    //         ),
+    //     ],
+    //   ),
+    // );
   }
 }
 
