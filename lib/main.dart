@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 final logger = Logger(
   printer: PrettyPrinter(
@@ -15,7 +18,13 @@ final logger = Logger(
 );
 
 void main() {
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppModel(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 final _router = GoRouter(
@@ -24,6 +33,92 @@ final _router = GoRouter(
     GoRoute(path: '/todo', builder: (context, state) => SingleTodoPage()),
   ],
 );
+
+class Todo {
+  int _index = 0;
+  DateTime _dateModified;
+  String _title = "";
+  String _body = "";
+
+  Todo({
+    required int index,
+    required String title,
+    required String body,
+    DateTime? dateModified,
+  }) : _index = index,
+       _dateModified = dateModified ?? DateTime(2025),
+       _title = title,
+       _body = body;
+
+  int get index => _index;
+  set index(int value) {
+    _index = value;
+  }
+
+  DateTime get dateModified => _dateModified;
+  set dateModified(DateTime value) {
+    _dateModified = dateModified;
+  }
+
+  String get title => _title;
+  set title(String value) {
+    if (value.isNotEmpty) {
+      _title = value;
+    }
+  }
+
+  String get body => _body;
+  set body(String value) {
+    _body = value;
+  }
+}
+
+class AppModel extends ChangeNotifier {
+  final List<Todo> _todos = [];
+
+  UnmodifiableListView<Todo> get todos => UnmodifiableListView(_todos);
+
+  void add() {
+    _todos.add(
+      Todo(
+        index: 0,
+        title: 'My first todo',
+        body: '',
+        dateModified: DateTime(2022, 1, 2, 12, 0, 0),
+      ),
+    );
+    _todos.add(
+      Todo(
+        index: 1,
+        title: 'My second todo',
+        body: '',
+        dateModified: DateTime(2023, 1, 2, 12, 0, 0),
+      ),
+    );
+    _todos.add(
+      Todo(
+        index: 2,
+        title: 'My third todo',
+        body: '',
+        dateModified: DateTime(2024, 1, 2, 12, 0, 0),
+      ),
+    );
+    _todos.add(
+      Todo(
+        index: 3,
+        title: 'My fourth todo',
+        body: '',
+        dateModified: DateTime(2025, 1, 2, 12, 0, 0),
+      ),
+    );
+    notifyListeners();
+  }
+
+  void removeAll() {
+    _todos.clear();
+    notifyListeners();
+  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -115,30 +210,38 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
   var selectAllBtnVisibility = true;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        TextButton(
-          // style: ButtonStyle(
-          //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
-          //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
-          // ),
-          onPressed: () {
-            logger.i("Select pressed");
-            setState(() {
-              selectAllBtnVisibility = !selectAllBtnVisibility;
-            });
-          },
-          child: Text("Select"),
-        ),
-        Visibility(
-          visible: selectAllBtnVisibility,
-          child: TextButton(
-            onPressed: () => {logger.i("Select All pressed")},
-            child: Text("Select All"),
-          ),
-        ),
-      ],
+    return Consumer<AppModel>(
+      builder: (context, model, child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              // style: ButtonStyle(
+              //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
+              //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+              // ),
+              onPressed: () {
+                logger.i("Select pressed");
+                // setState(() {
+                //   selectAllBtnVisibility = !selectAllBtnVisibility;
+                // });
+                model.add();
+              },
+              child: Text("Select"),
+            ),
+            Visibility(
+              visible: selectAllBtnVisibility,
+              child: TextButton(
+                onPressed: () {
+                  logger.i("Select All pressed");
+                  model.removeAll();
+                },
+                child: Text("Select All"),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -157,32 +260,6 @@ class TodoTableHeader extends StatelessWidget {
         Text("Title"),
         Text("Completed"),
       ],
-    );
-  }
-}
-
-/// class for viewing a single todo
-class SingleTodoPage extends StatelessWidget {
-  const SingleTodoPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Text("Single Todo View Edit Page"),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: '',
-            ),
-            enabled: true,
-          ),
-          ElevatedButton(
-            onPressed: () => context.go('/'),
-            child: const Text('Go to the home screen'),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -220,34 +297,41 @@ class _TodoListViewState extends State<TodoListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      fit: FlexFit.tight,
-      child: ListView.builder(
-        itemCount: todoItems.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Container(
-              color: Colors.pink,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(todoItems[index]["index"].toString()),
-                  SizedBox(width: 100),
-                  Text(todoItems[index]["title"] as String),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-      // child: ListView(
-      //   children: [
-      //     Text("Todo Listview"),
-      //     for (var todoItem in todoItems)
+    return Consumer<AppModel>(
+      builder: (context, model, child) {
+        return Flexible(
+          fit: FlexFit.tight,
+          child: ListView.builder(
+            itemCount: model.todos.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  color: Colors.pink,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Text(todoItems[index]["index"].toString()),
+                      // SizedBox(width: 100),
+                      // Text(todoItems[index]["title"] as String),
+                      Text(model.todos[index].index.toString()),
+                      SizedBox(width: 100),
+                      Text(model.todos[index].title),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          // child: ListView(
+          //   children: [
+          //     Text("Todo Listview"),
+          //     for (var todoItem in todoItems)
 
-      //   ],
-      // ),
+          //   ],
+          // ),
+        );
+      },
     );
     // return SizedBox(
     //   height: 500,
@@ -281,6 +365,35 @@ class PaginationFooter extends StatelessWidget {
     );
   }
 }
+
+// ----------------------------------------------------------------------
+
+/// class for viewing a single todo
+class SingleTodoPage extends StatelessWidget {
+  const SingleTodoPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Text("Single Todo View Edit Page"),
+          TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: '',
+            ),
+            enabled: true,
+          ),
+          ElevatedButton(
+            onPressed: () => context.go('/'),
+            child: const Text('Go to the home screen'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});
 
