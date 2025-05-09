@@ -169,18 +169,24 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Center(child: Text("Simonqq21's todo app yeehaw"))),
-      body: Center(
-        child: Column(
-          children: [
-            TodoTableHeaderBar(),
-            TodoListView(),
-            PaginationFooter(),
-            // Text("Home page"),
-            // ElevatedButton(
-            //   onPressed: () => context.go('/todo'),
-            //   child: const Text('Go to the todos screen'),
-            // ),
-          ],
+      body: Container(
+        padding: EdgeInsets.only(top: 25),
+        alignment: Alignment.topCenter,
+        child: SizedBox(
+          width: 1000,
+          height: 700,
+          child: Column(
+            children: [
+              TodoTableHeaderBar(),
+              TodoListView(),
+              PaginationFooter(),
+              // Text("Home page"),
+              // ElevatedButton(
+              //   onPressed: () => context.go('/todo'),
+              //   child: const Text('Go to the todos screen'),
+              // ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -197,7 +203,7 @@ class TodoTableHeaderBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(spacing: 0, children: [ActionButtonBar(), TodoTableHeader()]);
+    return Column(spacing: 0, children: [ActionButtonBar()]);
   }
 }
 
@@ -246,23 +252,23 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
   }
 }
 
-class TodoTableHeader extends StatelessWidget {
-  const TodoTableHeader({super.key});
+// class TodoTableHeader extends StatelessWidget {
+//   const TodoTableHeader({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        // Container(width: 100, height: 50, color: Colors.green),
-        // Container(width: 100, height: 50, color: Colors.red),
-        Text("Modified"),
-        Text("Title"),
-        Text("Completed"),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         // Container(width: 100, height: 50, color: Colors.green),
+//         // Container(width: 100, height: 50, color: Colors.red),
+//         Text("Modified"),
+//         Text("Title"),
+//         Text("Completed"),
+//       ],
+//     );
+//   }
+// }
 
 class TodoListView extends StatefulWidget {
   const TodoListView({super.key});
@@ -272,64 +278,122 @@ class TodoListView extends StatefulWidget {
 }
 
 class _TodoListViewState extends State<TodoListView> {
-  var todoItems = [
-    {
-      'index': 0,
-      'title': "My first todo",
-      'date_modified': DateTime(2022, 1, 2, 12, 0, 0),
-    },
-    {
-      'index': 1,
-      'title': "My second todo",
-      'date_modified': DateTime(2023, 1, 2, 12, 0, 0),
-    },
-    {
-      'index': 2,
-      'title': "My third todo",
-      'date_modified': DateTime(2024, 1, 2, 12, 0, 0),
-    },
-    {
-      'index': 3,
-      'title': "My fourth todo",
-      'date_modified': DateTime(2025, 1, 2, 12, 0, 0),
-    },
-  ];
+  // var todoItems = [
+  //   {
+  //     'index': 0,
+  //     'title': "My first todo",
+  //     'date_modified': DateTime(2022, 1, 2, 12, 0, 0),
+  //   },
+  //   {
+  //     'index': 1,
+  //     'title': "My second todo",
+  //     'date_modified': DateTime(2023, 1, 2, 12, 0, 0),
+  //   },
+  //   {
+  //     'index': 2,
+  //     'title': "My third todo",
+  //     'date_modified': DateTime(2024, 1, 2, 12, 0, 0),
+  //   },
+  //   {
+  //     'index': 3,
+  //     'title': "My fourth todo",
+  //     'date_modified': DateTime(2025, 1, 2, 12, 0, 0),
+  //   },
+  // ];
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppModel>(
       builder: (context, model, child) {
-        return Flexible(
-          fit: FlexFit.tight,
-          child: ListView.builder(
-            itemCount: model.todos.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Container(
-                  color: Colors.pink,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        // return Flexible(
+        //   fit: FlexFit.tight,
+        //   child: ListView.builder(
+        //     itemCount: model.todos.length,
+        //     itemBuilder: (BuildContext context, int index) {
+        //       return Padding(
+        //         padding: const EdgeInsets.only(bottom: 10),
+        //         child: Container(
+        //           color: Colors.pink,
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             children: [
+        //               // Text(todoItems[index]["index"].toString()),
+        //               // SizedBox(width: 100),
+        //               // Text(todoItems[index]["title"] as String),
+        //               Text(model.todos[index].index.toString()),
+        //               SizedBox(width: 100),
+        //               Text(model.todos[index].title),
+        //             ],
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        //   // child: ListView(
+        //   //   children: [
+        //   //     Text("Todo Listview"),
+        //   //     for (var todoItem in todoItems)
+
+        //   //   ],
+        //   // ),
+        // );
+
+        return Container(
+          width: 1000,
+          height: 600,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Table(
+              border: TableBorder.all(),
+              columnWidths: {
+                0: FixedColumnWidth(50),
+                1: FlexColumnWidth(1),
+                2: FlexColumnWidth(3),
+                3: FlexColumnWidth(1),
+              },
+              children: [
+                TableRow(
+                  decoration: BoxDecoration(color: Colors.green),
+                  children: [
+                    Center(
+                      heightFactor: 2,
+                      child: Container(
+                        color: Colors.blue,
+                        width: 10,
+                        height: 10,
+                      ),
+                    ),
+                    Container(
+                      color: Colors.red,
+                      child: Text("Modified", textAlign: TextAlign.center),
+                    ),
+                    Container(
+                      color: Colors.yellow,
+                      child: Text("Title", textAlign: TextAlign.center),
+                    ),
+                    Container(
+                      color: Colors.lightBlue,
+                      child: Text("Completed", textAlign: TextAlign.center),
+                    ),
+                  ],
+                ),
+                for (var todo in model._todos)
+                  TableRow(
                     children: [
-                      // Text(todoItems[index]["index"].toString()),
-                      // SizedBox(width: 100),
-                      // Text(todoItems[index]["title"] as String),
-                      Text(model.todos[index].index.toString()),
-                      SizedBox(width: 100),
-                      Text(model.todos[index].title),
+                      Text(todo.index.toString()),
+                      Text(todo.dateModified.toString()),
+                      Text(todo.title.toString()),
+                      Text(todo.index.toString()),
                     ],
                   ),
-                ),
-              );
-            },
-          ),
-          // child: ListView(
-          //   children: [
-          //     Text("Todo Listview"),
-          //     for (var todoItem in todoItems)
 
-          //   ],
-          // ),
+                // TableRow(children: [Text("5"), Text("6"), Text("7"), Text("8")]),
+                // TableRow(children: [Text("1"), Text("2"), Text("3"), Text("4")]),
+                // TableRow(children: [Text("1"), Text("2"), Text("3"), Text("4")]),
+                // TableRow(children: [Text("1"), Text("2"), Text("3"), Text("4")]),
+              ],
+            ),
+          ),
         );
       },
     );
