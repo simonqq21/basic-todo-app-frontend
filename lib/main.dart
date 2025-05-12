@@ -190,7 +190,13 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => logger.d("add todo button pressed"),
+        onPressed: () {
+          logger.d("add todo button pressed");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SingleTodoPage()),
+          );
+        },
         tooltip: "create a todo",
         child: const Icon(Icons.add),
       ),
@@ -449,7 +455,10 @@ class SingleTodoPage extends StatelessWidget {
             enabled: true,
           ),
           ElevatedButton(
-            onPressed: () => context.go('/'),
+            // onPressed: () => context.go('/'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: const Text('Go to the home screen'),
           ),
         ],
