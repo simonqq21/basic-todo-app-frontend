@@ -7,12 +7,16 @@ import 'package:basic_todo_app_frontend/viewmodels/homeviewmodel.dart';
 import 'package:basic_todo_app_frontend/views/homeview.dart';
 
 import 'package:basic_todo_app_frontend/views/createtodoview.dart';
+import 'package:basic_todo_app_frontend/viewmodels/createtodoviewmodel.dart';
 
 void main() {
   // runApp(MyApp());
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => HomeViewModel())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => HomeViewModel()),
+        ChangeNotifierProvider(create: (context) => CreateTodoViewModel()),
+      ],
       child: const MyApp(),
     ),
     // ChangeNotifierProvider(

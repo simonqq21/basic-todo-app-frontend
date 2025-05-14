@@ -3,9 +3,7 @@ import 'package:basic_todo_app_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:basic_todo_app_frontend/viewmodels/homeviewmodel.dart';
-
-var tableTextStyle = TextStyle(fontSize: 20);
-var buttonTextStyle = TextStyle(fontSize: 20);
+import 'common.dart';
 
 // class for viewing a list of all todos paginated
 class HomePage extends StatelessWidget {
@@ -60,6 +58,8 @@ class TodoTableHeaderBar extends StatelessWidget {
 }
 
 class ActionButtonBar extends StatefulWidget {
+  const ActionButtonBar({super.key});
+
   @override
   State<ActionButtonBar> createState() => _ActionButtonBarState();
 }
@@ -85,7 +85,7 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
                 // });
                 model.add();
               },
-              child: Text("Select", style: buttonTextStyle),
+              child: Text("Select", style: globalTextStyle),
             ),
             Visibility(
               visible: selectAllBtnVisibility,
@@ -94,7 +94,7 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
                   logger.i("Select All pressed");
                   model.removeAll();
                 },
-                child: Text("Select All", style: buttonTextStyle),
+                child: Text("Select All", style: globalTextStyle),
               ),
             ),
           ],
@@ -223,7 +223,7 @@ class _TodoListViewState extends State<TodoListView> {
                       child: Text(
                         " ",
                         textAlign: TextAlign.center,
-                        style: tableTextStyle,
+                        style: globalTextStyle,
                       ),
                     ),
                     Container(
@@ -231,7 +231,7 @@ class _TodoListViewState extends State<TodoListView> {
                       child: Text(
                         "Modified",
                         textAlign: TextAlign.center,
-                        style: tableTextStyle,
+                        style: globalTextStyle,
                       ),
                     ),
                     Container(
@@ -239,7 +239,7 @@ class _TodoListViewState extends State<TodoListView> {
                       child: Text(
                         "Title",
                         textAlign: TextAlign.center,
-                        style: tableTextStyle,
+                        style: globalTextStyle,
                       ),
                     ),
                     Container(
@@ -248,7 +248,7 @@ class _TodoListViewState extends State<TodoListView> {
                       child: Text(
                         "Completed",
                         textAlign: TextAlign.center,
-                        style: tableTextStyle,
+                        style: globalTextStyle,
                       ),
                     ),
                     Container(
@@ -256,7 +256,7 @@ class _TodoListViewState extends State<TodoListView> {
                       child: Text(
                         " ",
                         textAlign: TextAlign.center,
-                        style: tableTextStyle,
+                        style: globalTextStyle,
                       ),
                     ),
                   ],
@@ -273,7 +273,7 @@ class _TodoListViewState extends State<TodoListView> {
                         child: Text(
                           todo.index.toString(),
                           textAlign: TextAlign.center,
-                          style: tableTextStyle,
+                          style: globalTextStyle,
                         ),
                       ),
                       Container(
@@ -282,7 +282,7 @@ class _TodoListViewState extends State<TodoListView> {
                         child: Text(
                           todo.dateModified.toString(),
                           textAlign: TextAlign.center,
-                          style: tableTextStyle,
+                          style: globalTextStyle,
                         ),
                       ),
                       Container(
@@ -290,7 +290,7 @@ class _TodoListViewState extends State<TodoListView> {
                         alignment: Alignment.center,
                         child: Text(
                           todo.title.toString(),
-                          style: tableTextStyle,
+                          style: globalTextStyle,
                         ),
                       ),
                       Container(
@@ -299,7 +299,7 @@ class _TodoListViewState extends State<TodoListView> {
                         child: Text(
                           todo.index.toString(),
                           textAlign: TextAlign.center,
-                          style: tableTextStyle,
+                          style: globalTextStyle,
                         ),
                       ),
                       Container(color: Colors.lightBlue),
