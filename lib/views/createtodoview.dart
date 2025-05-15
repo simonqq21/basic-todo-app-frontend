@@ -114,7 +114,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                         ),
                       ],
                     ),
-                    TextButton(
+                    ElevatedButton(
                       onPressed: () {
                         if (viewmodel.validateAndSave()) {
                           ScaffoldMessenger.of(context).showSnackBar(
