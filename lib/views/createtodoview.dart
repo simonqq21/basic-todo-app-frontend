@@ -131,7 +131,8 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                     ElevatedButton(
                       // onPressed: () => context.go('/'),
                       onPressed: () {
-                        context.pop();
+                        // context.pop();
+                        context.go('/');
                       },
                       child: const Text('Go to the home screen'),
                     ),

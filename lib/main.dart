@@ -26,15 +26,15 @@ void main() {
   );
 }
 
-final _router = GoRouter(
-  routes: <GoRoute>[
-    GoRoute(path: '/', builder: (context, state) => HomePage()),
-    GoRoute(path: '/todo', builder: (context, state) => SingleTodoPage()),
-  ],
-);
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  static final GoRouter _router = GoRouter(
+    routes: <GoRoute>[
+      GoRoute(path: '/', builder: (context, state) => HomePage()),
+      GoRoute(path: '/todo', builder: (context, state) => SingleTodoPage()),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
