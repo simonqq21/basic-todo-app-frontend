@@ -9,7 +9,21 @@ class CreateTodoViewModel extends ChangeNotifier {
   final titleController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  SingleTodoModel? get todo => _todo;
+  SingleTodoModel get todo => _todo;
+
+  // bool? get completed => _todo.completed1;
+  // set completed(bool? val) {
+  //   _todo.completed1 = val;
+  //   logger.i("a $val ${_todo.completed1}");
+  //   notifyListeners();
+  // }
+
+  // bool get completed => _todo.completed1;
+  // set completed(bool? val) {
+  //   _todo.completed1 = val ?? false;
+  //   logger.i("a $val ${_todo.completed1}");
+  //   notifyListeners();
+  // }
 
   bool validateAndSave() {
     final form = formKey.currentState;

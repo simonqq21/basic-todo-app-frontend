@@ -14,9 +14,11 @@ class SingleTodoPage extends StatefulWidget {
 }
 
 class SingleTodoPageState extends State<SingleTodoPage> {
+  bool? v1 = false;
+
   @override
   Widget build(BuildContext context) {
-    logger.i("xyz");
+    // logger.i("xyz");
     return Scaffold(
       appBar: AppBar(title: Center(child: Text("Single Todo View Edit Page"))),
       body: Consumer<CreateTodoViewModel>(
@@ -25,7 +27,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
             padding: EdgeInsets.only(top: 25),
             alignment: Alignment.topCenter,
             child: SizedBox(
-              width: 1000,
+              width: 1200,
               height: 900,
               child: Form(
                 key: viewmodel.formKey,
@@ -62,7 +64,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -73,6 +75,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                               width: 600,
                               height: 480,
                               child: TextFormField(
+                                textAlignVertical: TextAlignVertical.top,
                                 expands: true,
                                 maxLines: null,
                                 keyboardType: TextInputType.multiline,
@@ -81,6 +84,31 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                                   border: OutlineInputBorder(),
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Completed: "),
+                            Checkbox(
+                              value: viewmodel.todo!.todo!.completed,
+                              // tristate: true,
+                              // onChanged: (bool? val) {
+                              //   // setState(() {});
+                              //   viewmodel.completed = val;
+                              //   logger.i('$val => ${viewmodel.completed}');
+                              // },
+                              onChanged: (bool? val) {
+                                setState(() {
+                                  viewmodel.todo!.todo!.completed = val;
+                                });
+                                // viewmodel.completed = val;
+                                // logger.i('$val => ${viewmodel.completed}');
+                                logger.i(
+                                  '$val => ${viewmodel.todo!.todo!.completed}',
+                                );
+                              },
                             ),
                           ],
                         ),

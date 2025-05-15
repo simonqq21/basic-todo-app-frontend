@@ -3,6 +3,7 @@ class Todo {
   DateTime _dateModified;
   String _title = "";
   String _body = "";
+  bool _completed = false;
 
   Todo({
     required int index,
@@ -29,6 +30,11 @@ class Todo {
     if (value.isNotEmpty) {
       _title = value;
     }
+  }
+
+  bool get completed => _completed;
+  set completed(bool val) {
+    _completed = val;
   }
 
   String get body => _body;
