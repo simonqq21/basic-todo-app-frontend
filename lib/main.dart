@@ -8,9 +8,13 @@ import 'package:basic_todo_app_frontend/views/homeview.dart';
 
 import 'package:basic_todo_app_frontend/views/createtodoview.dart';
 import 'package:basic_todo_app_frontend/viewmodels/createtodoviewmodel.dart';
+import 'utils/logger.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
   // runApp(MyApp());
+  await dotenv.load(fileName: ".env");
+  logger.d("backend URL = ${dotenv.env['BACKEND_URL']}");
   runApp(
     MultiProvider(
       providers: [

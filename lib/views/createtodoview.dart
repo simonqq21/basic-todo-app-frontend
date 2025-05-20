@@ -103,7 +103,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                                   children: [
                                     Text("Completed: "),
                                     Checkbox(
-                                      value: viewmodel.todo!.todo!.completed,
+                                      value: viewmodel.todo.todo!.completed,
                                       // tristate: true,
                                       // onChanged: (bool? val) {
                                       //   // setState(() {});
@@ -112,12 +112,12 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                                       // },
                                       onChanged: (bool? val) {
                                         setState(() {
-                                          viewmodel.todo!.todo!.completed = val;
+                                          viewmodel.todo.todo!.completed = val;
                                         });
                                         // viewmodel.completed = val;
                                         // logger.i('$val => ${viewmodel.completed}');
                                         logger.i(
-                                          '$val => ${viewmodel.todo!.todo!.completed}',
+                                          '$val => ${viewmodel.todo.todo!.completed}',
                                         );
                                       },
                                     ),
@@ -140,7 +140,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'You entered title ${viewmodel.todo!.todo!.title}!',
+                                    'You entered title ${viewmodel.todo.todo!.title}!',
                                   ),
                                 ),
                               );

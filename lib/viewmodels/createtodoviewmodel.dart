@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_todo_app_frontend/utils/logger.dart';
-import 'package:provider/provider.dart';
-import 'package:basic_todo_app_frontend/models/appmodel.dart';
+import 'package:basic_todo_app_frontend/data/repositories/appmodel.dart';
 
 class CreateTodoViewModel extends ChangeNotifier {
   final SingleTodoModel _todo = SingleTodoModel();
