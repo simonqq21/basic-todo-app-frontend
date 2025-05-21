@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_getters_setters
+
 class Todo {
   int _index = 0;
   DateTime _dateModified;
