@@ -14,7 +14,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future main() async {
   // runApp(MyApp());
   await dotenv.load(fileName: ".env");
-  logger.d("backend URL = ${dotenv.env['BACKEND_URL']}");
+  logger.d("base backend URL = ${dotenv.env['BASE_URL']}");
   runApp(
     MultiProvider(
       providers: [
