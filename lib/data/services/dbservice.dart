@@ -7,10 +7,11 @@ import '../../utils/logger.dart';
 import "../models/todo.dart";
 
 class TodoDBService {
+  // final String _baseURL = "http://localhost:3000";
   final String _baseURL = dotenv.env["BASE_URL"] ?? "http://localhost:3000";
-
   // get a single Todo
   Future<Map<String, dynamic>> getTodo(int id) async {
+    logger.d('baseUrl = $_baseURL');
     final response = await http
         .get(Uri.parse("$_baseURL/todos/$id"))
         .catchError((error) {

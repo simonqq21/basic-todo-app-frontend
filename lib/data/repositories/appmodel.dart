@@ -12,7 +12,7 @@ class HomeModel {
 
   void f1() async {
     logger.d("f1 called");
-    logger.d("Logging from f1: ${await todoDbService.getTodo()}");
+    logger.d("Logging from f1: ${await todoDbService.getTodo(87)}");
   }
 
   // UnmodifiableListView<Todo> get todos => UnmodifiableListView(_todos);
