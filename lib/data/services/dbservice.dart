@@ -9,38 +9,36 @@ import "../models/todo.dart";
 class TodoDBService {
   // final String _baseURL = "http://localhost:3000";
   final String _baseURL = dotenv.env["BASE_URL"] ?? "http://localhost:3000";
+
   // get a single Todo
-  Future<Map<String, dynamic>> getTodo(int id) async {
-    logger.d('baseUrl = $_baseURL');
-    final response = await http
+  Future<http.Response> getTodo(int id) async {
+    return http
         .get(Uri.parse("$_baseURL/todos/$id"))
+        .then((response) {
+          logger.d("response statuscode = ${response.statusCode}");
+          // logger.d(jsonDecode(response.body));
+          return response;
+        })
         .catchError((error) {
           logger.e(error);
-          return error;
+          throw Exception("Failed to get data.");
         });
-    logger.d("response statuscode = ${response.statusCode}");
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception("Failed to fetch data.");
-    }
-    // return {"todo xyz": "2"};
   }
 
   // get multiple Todos paginated
-  Future<List<Map<String, dynamic>>> getTodosPaginated(int page) async {
-    final response = await http.get(Uri.parse("$_baseURL/todos")).catchError((
-      error,
-    ) {
-      logger.e(error);
-      return error;
-    });
-    logger.d("response statuscode = ${response.statusCode}");
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception("Failed to fetch data.");
-    }
+  Future<http.Response> getTodosPaginated(int page, {int? limit}) async {
+    limit = limit ?? 99;
+    return http
+        .get(Uri.parse("$_baseURL/todos/page/$page?limit=$limit"))
+        .then((response) {
+          logger.d("response statuscode = ${response.statusCode}");
+          // logger.d(jsonDecode(response.body));
+          return response;
+        })
+        .catchError((error) {
+          logger.e(error);
+          throw Exception("Failed to get data.");
+        });
   }
 
   // post a single Todo
@@ -50,14 +48,28 @@ class TodoDBService {
     DateTime datecreated,
     String writtenBy,
   ) async {
-    final response = await http.post(
-      Uri.parse("$_baseURL/todos"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{'title': title}),
-    );
-    return response;
+    return http
+        .post(
+          Uri.parse("$_baseURL/todos"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'title': title,
+            'body': body,
+            // 'dateCreated': datecreated.toIso8601String(),
+            'written_by': writtenBy,
+          }),
+        )
+        .then((response) {
+          logger.d("response statuscode = ${response.statusCode}");
+          // logger.d(jsonDecode(response.body));
+          return response;
+        })
+        .catchError((error) {
+          logger.e(error);
+          throw Exception("Failed to post data.");
+        });
   }
 
   // put a single Todo
@@ -68,24 +80,42 @@ class TodoDBService {
     DateTime datecreated,
     String writtenBy,
   ) async {
-    final response = await http.put(
-      Uri.parse("$_baseURL/todos/$id"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{'title': title}),
-    );
-    return response;
+    return http
+        .put(
+          Uri.parse("$_baseURL/todos/$id"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{'title': title}),
+        )
+        .then((response) {
+          logger.d("response statuscode = ${response.statusCode}");
+          return response;
+        })
+        .catchError((error) {
+          logger.e(error);
+          throw Exception("Failed to put data.");
+        });
+    ;
   }
 
   // delete a single Todo
   Future<http.Response> deleteTodo(int id) async {
-    final response = await http.delete(
-      Uri.parse("$_baseURL/todos/$id"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    return response;
+    return http
+        .delete(
+          Uri.parse("$_baseURL/todos/$id"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        )
+        .then((response) {
+          logger.d("response statuscode = ${response.statusCode}");
+          return response;
+        })
+        .catchError((error) {
+          logger.e(error);
+          throw Exception("Failed to delete data.");
+        });
+    ;
   }
 }
