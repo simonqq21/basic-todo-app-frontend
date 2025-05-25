@@ -35,7 +35,7 @@ void main() async {
   test(
     'Getting todos paginated must succeed with HTTP 200 and return the list of todo objects paginated.',
     () async {
-      result = await dbService.getTodosPaginated(1, limit: 6);
+      result = await dbService.getTodosPaginated(page: 1, limit: 12);
       body = jsonDecode(result.body);
       logger.d('body length = ${body["todos"].length}');
       expect(result.statusCode, 200);
@@ -45,7 +45,7 @@ void main() async {
   test(
     'Finding todos with a case insensitive title substring must succeed with HTTP 200 and return the list of todo objects.',
     () async {
-      result = await dbService.getTodosPaginated(1);
+      result = await dbService.searchTodos("test", page: 1, limit: 120);
       body = jsonDecode(result.body);
       logger.d('body length = ${body["todos"].length}');
       expect(result.statusCode, 200);
@@ -60,18 +60,17 @@ void main() async {
   test(
     'Deleting a todo must succeed with HTTP 200, and the object must not exist in the backend.',
     () async {
-      // result = await dbService.getTodosPaginated(1);
-      // body = jsonDecode(result.body);
-      // logger.d('body length = ${body["todos"].length}');
+      result = await dbService.searchTodos("test", page: 1, limit: 120);
+      body = jsonDecode(result.body);
+      logger.d('body length = ${body["count"]}');
+      int deleteCount = body["count"] >= 25 ? body["count"] - 25 : 0;
       // for (var todo in body["todos"]) {
       //   result = await dbService.deleteTodo(todo["id"]);
       // }
-      // result = await dbService.getTodosPaginated(1);
-      // body = jsonDecode(result.body);
-      // for (var todo in body["todos"]) {
-      //   result = await dbService.deleteTodo(todo["id"]);
-      // }
-      // expect(result.statusCode, 200);
+      for (var i = 0; i < deleteCount; i++) {
+        result = await dbService.deleteTodo(body["todos"][i]["id"]);
+      }
+      expect(result.statusCode, 200);
       // expect(body["todos"].length, 0);
     },
   );

@@ -26,10 +26,33 @@ class TodoDBService {
   }
 
   // get multiple Todos paginated
-  Future<http.Response> getTodosPaginated(int page, {int? limit}) async {
+  Future<http.Response> getTodosPaginated({int? page, int? limit}) async {
+    page = page ?? 1;
     limit = limit ?? 99;
     return http
-        .get(Uri.parse("$_baseURL/todos/page/$page?limit=$limit"))
+        .get(Uri.parse("$_baseURL/todos/?page=$page&limit=$limit"))
+        .then((response) {
+          logger.d("response statuscode = ${response.statusCode}");
+          return response;
+        })
+        .catchError((error) {
+          logger.e(error);
+          throw Exception("Failed to get data.");
+        });
+  }
+
+  // search for todo titles
+  Future<http.Response> searchTodos(
+    String searchString, {
+    int? page,
+    int? limit,
+  }) async {
+    page = page ?? 1;
+    limit = limit ?? 99;
+    return http
+        .get(
+          Uri.parse("$_baseURL/todos/?search=$searchString&$page&limit=$limit"),
+        )
         .then((response) {
           logger.d("response statuscode = ${response.statusCode}");
           // logger.d(jsonDecode(response.body));
@@ -96,7 +119,6 @@ class TodoDBService {
           logger.e(error);
           throw Exception("Failed to put data.");
         });
-    ;
   }
 
   // delete a single Todo
@@ -116,6 +138,5 @@ class TodoDBService {
           logger.e(error);
           throw Exception("Failed to delete data.");
         });
-    ;
   }
 }
