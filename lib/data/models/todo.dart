@@ -1,25 +1,43 @@
 // ignore_for_file: unnecessary_getters_setters
 
 class Todo {
-  int _index = 0;
+  int _id = 0;
   DateTime _dateModified;
   String _title = "";
   String _body = "";
+  String _writtenBy = "";
   bool _completed = false;
 
   Todo({
-    required int index,
+    required int id,
     required String title,
     required String body,
     DateTime? dateModified,
-  }) : _index = index,
-       _dateModified = dateModified ?? DateTime(2025),
+    String? writtenBy,
+    bool? completed,
+  }) : _id = id,
        _title = title,
-       _body = body;
+       _body = body,
+       _dateModified = dateModified ?? DateTime(2025),
+       _writtenBy = writtenBy ?? "default",
+       _completed = completed ?? false;
 
-  int get index => _index;
-  set index(int value) {
-    _index = value;
+  factory Todo.fromJSON(Map<String, dynamic> json) {
+    return Todo(
+      id: json['id'] as int,
+      title: json['title'] as String,
+      body: json['body'] as String,
+      dateModified: DateTime.fromMillisecondsSinceEpoch(
+        int.parse(json['updated_at_ts']),
+      ),
+      writtenBy: json['written_by'] as String,
+      completed: json['completed'] as bool,
+    );
+  }
+
+  int get id => _id;
+  set id(int value) {
+    _id = value;
   }
 
   DateTime get dateModified => _dateModified;
@@ -37,6 +55,11 @@ class Todo {
   bool get completed => _completed;
   set completed(bool val) {
     _completed = val;
+  }
+
+  String get writtenBy => _writtenBy;
+  set writtenBy(String val) {
+    _writtenBy = val;
   }
 
   String get body => _body;

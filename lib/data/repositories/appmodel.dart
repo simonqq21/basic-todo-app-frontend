@@ -19,7 +19,7 @@ class HomeModel {
 }
 
 class SingleTodoModel {
-  Todo _todo = Todo(index: 0, title: "", body: "");
+  Todo _todo = Todo(id: 0, title: "", body: "");
   TodoDBService todoDbService = TodoDBService();
 
   // bool? _completed1 = false;

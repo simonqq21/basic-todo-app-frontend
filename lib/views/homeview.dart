@@ -272,7 +272,7 @@ class _TodoListViewState extends State<TodoListView> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          todo.index.toString(),
+                          todo.id.toString(),
                           textAlign: TextAlign.center,
                           style: globalTextStyle,
                         ),
@@ -298,7 +298,7 @@ class _TodoListViewState extends State<TodoListView> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          todo.index.toString(),
+                          todo.id.toString(),
                           textAlign: TextAlign.center,
                           style: globalTextStyle,
                         ),

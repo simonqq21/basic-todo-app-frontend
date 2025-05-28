@@ -11,7 +11,7 @@ class HomeViewModel extends ChangeNotifier {
     _model.f1();
     _model.todos.add(
       Todo(
-        index: 0,
+        id: 0,
         title: 'My first todo',
         body: '',
         dateModified: DateTime(2022, 1, 2, 12, 0, 0),
@@ -19,7 +19,7 @@ class HomeViewModel extends ChangeNotifier {
     );
     _model.todos.add(
       Todo(
-        index: 1,
+        id: 1,
         title: 'My second todo',
         body: '',
         dateModified: DateTime(2023, 1, 2, 12, 0, 0),
@@ -27,7 +27,7 @@ class HomeViewModel extends ChangeNotifier {
     );
     _model.todos.add(
       Todo(
-        index: 2,
+        id: 2,
         title: 'My third todo',
         body: '',
         dateModified: DateTime(2024, 1, 2, 12, 0, 0),
@@ -35,7 +35,7 @@ class HomeViewModel extends ChangeNotifier {
     );
     _model.todos.add(
       Todo(
-        index: 3,
+        id: 3,
         title: 'My fourth todo',
         body: '',
         dateModified: DateTime(2025, 1, 2, 12, 0, 0),

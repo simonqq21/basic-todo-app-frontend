@@ -28,7 +28,7 @@ class CreateTodoViewModel extends ChangeNotifier {
     final form = formKey.currentState;
     if (form!.validate()) {
       logger.i("mnopqr");
-      _todo.todo = Todo(index: 1, title: titleController.text, body: "body123");
+      _todo.todo = Todo(id: 1, title: titleController.text, body: "body123");
       notifyListeners();
       return true;
     }
