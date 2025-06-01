@@ -35,8 +35,8 @@ class TodoDBService {
 
   // get multiple Todos paginated
   Future<Result<Map>> getTodosPaginated({int? page, int? limit}) async {
-    page = page ?? 0;
-    limit = limit ?? 99;
+    page = page ?? 1;
+    limit = limit ?? 10;
     List<Todo> todos = [];
 
     try {
@@ -67,13 +67,10 @@ class TodoDBService {
     int? limit,
   }) async {
     page = page ?? 1;
-    limit = limit ?? 99;
+    limit = limit ?? 10;
     List<Todo> todos = [];
 
     try {
-      logger.i(
-        "URL = ${Uri.parse("$_baseURL/todos/?search=$searchString&page=$page&limit=$limit")}",
-      );
       final response = await http.get(
         Uri.parse(
           "$_baseURL/todos/?search=$searchString&page=$page&limit=$limit",
@@ -96,10 +93,11 @@ class TodoDBService {
 
   // post a single Todo
   Future<Result<Map>> createTodo(
-    String title,
-    String body,
-    DateTime datecreated,
-    String writtenBy,
+    // String title,
+    // String body,
+    // DateTime datecreated,
+    // String writtenBy,
+    Todo newTodo,
   ) async {
     try {
       final response = await http.post(
@@ -108,10 +106,10 @@ class TodoDBService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
-          'title': title,
-          'body': body,
+          'title': newTodo.title,
+          'body': newTodo.body,
           // 'dateCreated': datecreated.toIso8601String(),
-          'written_by': writtenBy,
+          'written_by': newTodo.writtenBy,
         }),
       );
       if (response.statusCode == 201) {
@@ -126,13 +124,7 @@ class TodoDBService {
   }
 
   // put a single Todo
-  Future<Result<Map>> updateTodo(
-    int id,
-    String title,
-    String body,
-    DateTime datecreated,
-    String writtenBy,
-  ) async {
+  Future<Result<Map>> updateTodo(int id, Todo newTodo) async {
     try {
       final response = await http.put(
         Uri.parse("$_baseURL/todos/$id"),
@@ -140,10 +132,10 @@ class TodoDBService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
-          'title': title,
-          'body': body,
+          'title': newTodo.title,
+          'body': newTodo.body,
           // 'dateCreated': datecreated.toIso8601String(),
-          'written_by': writtenBy,
+          'written_by': newTodo.writtenBy,
         }),
       );
       if (response.statusCode == 200) {

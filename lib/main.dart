@@ -36,7 +36,12 @@ class MyApp extends StatelessWidget {
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
       GoRoute(path: '/', builder: (context, state) => HomePage()),
-      GoRoute(path: '/todo', builder: (context, state) => SingleTodoPage()),
+      GoRoute(
+        path: '/todo/:id',
+        builder:
+            (context, state) =>
+                SingleTodoPage(id: int.parse(state.pathParameters['id'] ?? "")),
+      ),
     ],
   );
 

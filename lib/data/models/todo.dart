@@ -9,13 +9,13 @@ class Todo {
   bool _completed = false;
 
   Todo({
-    required int id,
     required String title,
     required String body,
     DateTime? dateModified,
     String? writtenBy,
     bool? completed,
-  }) : _id = id,
+    int? id,
+  }) : _id = id ?? -1,
        _title = title,
        _body = body,
        _dateModified = dateModified ?? DateTime(2025),
@@ -53,6 +53,15 @@ class Todo {
   }
 
   bool get completed => _completed;
+  String get completedString {
+    // return _completed? "Yes" : "No";
+    if (_completed) {
+      return "Yes";
+    } else {
+      return "No";
+    }
+  }
+
   set completed(bool val) {
     _completed = val;
   }

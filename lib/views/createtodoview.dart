@@ -7,23 +7,41 @@ import 'package:basic_todo_app_frontend/viewmodels/createtodoviewmodel.dart';
 
 /// class for viewing a single todo
 class SingleTodoPage extends StatefulWidget {
-  const SingleTodoPage({super.key});
+  final int id;
+  const SingleTodoPage({super.key, this.id = 0});
 
   @override
   SingleTodoPageState createState() => SingleTodoPageState();
 }
 
 class SingleTodoPageState extends State<SingleTodoPage> {
-  bool? v1 = false;
+  // bool? v1 = false;
+
+  // SingleTodoPageState() {
+  //   CreateTodoViewModel viewmodel = context.read();
+  //   viewmodel.todo.id = id;
+  // }
+
+  @override
+  void initState() {
+    CreateTodoViewModel viewmodel = context.read();
+    viewmodel.todo.id = widget.id;
+    logger.i("create todo view model id = ${viewmodel.todo.id}");
+    viewmodel.loadTodo(viewmodel.todo.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // logger.i("xyz");
-    return Scaffold(
-      appBar: AppBar(title: Center(child: Text("Single Todo View Edit Page"))),
-      body: Consumer<CreateTodoViewModel>(
-        builder: (context, viewmodel, child) {
-          return Container(
+
+    return Consumer<CreateTodoViewModel>(
+      builder: (context, viewmodel, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Center(child: Text("Single Todo View Edit Page")),
+          ),
+          body: Container(
             padding: EdgeInsets.only(top: 25),
             alignment: Alignment.topCenter,
             child: SizedBox(
@@ -45,12 +63,10 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                             controller: viewmodel.titleController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-
                               labelText: 'Title',
                             ),
                             enabled: true,
                             validator: (val) {
-                              logger.i("abcdef");
                               if (val == null || val.isEmpty) {
                                 return 'Please enter the title.';
                               }
@@ -87,6 +103,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                                     labelText: 'Body xyz',
                                     border: OutlineInputBorder(),
                                   ),
+                                  controller: viewmodel.bodyController,
                                 ),
                               ),
                             ],
@@ -103,7 +120,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                                   children: [
                                     Text("Completed: "),
                                     Checkbox(
-                                      value: viewmodel.todo.todo!.completed,
+                                      value: viewmodel.todo.completed,
                                       // tristate: true,
                                       // onChanged: (bool? val) {
                                       //   // setState(() {});
@@ -112,12 +129,13 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                                       // },
                                       onChanged: (bool? val) {
                                         setState(() {
-                                          viewmodel.todo.todo!.completed = val;
+                                          viewmodel.todo.completed =
+                                              val ?? false;
                                         });
                                         // viewmodel.completed = val;
                                         // logger.i('$val => ${viewmodel.completed}');
                                         logger.i(
-                                          '$val => ${viewmodel.todo.todo!.completed}',
+                                          '$val => ${viewmodel.todo.completed}',
                                         );
                                       },
                                     ),
@@ -135,21 +153,6 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            if (viewmodel.validateAndSave()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'You entered title ${viewmodel.todo.todo!.title}!',
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                          child: Text('Submit'),
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
                           // onPressed: () => context.go('/'),
                           onPressed: () {
                             // context.pop();
@@ -157,15 +160,30 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                           },
                           child: const Text('Go to the home screen'),
                         ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (viewmodel.validateAndSave()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'You entered title ${viewmodel.todo.title}!',
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: Text('Submit'),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

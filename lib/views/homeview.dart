@@ -1,3 +1,4 @@
+import 'package:basic_todo_app_frontend/viewmodels/createtodoviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_todo_app_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
@@ -10,41 +11,47 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Center(child: Text("Simonqq21's todo app yeehaw"))),
-      body: Container(
-        padding: EdgeInsets.only(top: 25),
-        alignment: Alignment.topCenter,
-        child: SizedBox(
-          width: 1000,
-          height: 900,
-          child: Column(
-            children: [
-              TodoTableHeaderBar(),
-              TodoListView(),
-              PaginationFooter(),
-              // Text("Home page"),
-              // ElevatedButton(
-              //   onPressed: () => context.go('/todo'),
-              //   child: const Text('Go to the todos screen'),
-              // ),
-            ],
+    return Consumer<HomeViewModel>(
+      builder: (BuildContext context, HomeViewModel value, Widget? child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Center(child: Text("Simonqq21's todo app yeehaw")),
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          logger.d("add todo button pressed");
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
-          // );
-          // context.push('/todo');
-          context.go('/todo');
-        },
-        tooltip: "create a todo",
-        child: const Icon(Icons.add),
-      ),
+          body: Container(
+            padding: EdgeInsets.only(top: 25),
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: 1000,
+              height: 900,
+              child: Column(
+                children: [
+                  TodoTableHeaderBar(),
+                  TodoListView(),
+                  PaginationFooter(),
+                  // Text("Home page"),
+                  // ElevatedButton(
+                  //   onPressed: () => context.go('/todo'),
+                  //   child: const Text('Go to the todos screen'),
+                  // ),
+                ],
+              ),
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              logger.d("add todo button pressed");
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
+              // );
+              // context.push('/todo');
+              context.go('/todo');
+            },
+            tooltip: "create a todo",
+            child: const Icon(Icons.add),
+          ),
+        );
+      },
     );
   }
 }
@@ -66,11 +73,11 @@ class ActionButtonBar extends StatefulWidget {
 }
 
 class _ActionButtonBarState extends State<ActionButtonBar> {
-  var selectAllBtnVisibility = true;
+  var selectAllBtnVisibility = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
-      builder: (context, model, child) {
+      builder: (context, viewmodel, child) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -81,10 +88,10 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
               // ),
               onPressed: () {
                 logger.i("Select pressed");
-                // setState(() {
-                //   selectAllBtnVisibility = !selectAllBtnVisibility;
-                // });
-                model.add();
+                setState(() {
+                  selectAllBtnVisibility = !selectAllBtnVisibility;
+                });
+                // viewmodel.add();
               },
               child: Text("Select", style: globalTextStyle),
             ),
@@ -93,7 +100,7 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
               child: TextButton(
                 onPressed: () {
                   logger.i("Select All pressed");
-                  model.removeAll();
+                  // viewmodel.removeAll();
                 },
                 child: Text("Select All", style: globalTextStyle),
               ),
@@ -155,42 +162,18 @@ class _TodoListViewState extends State<TodoListView> {
   // ];
 
   @override
+  void initState() {
+    HomeViewModel viewmodel = context.read();
+    viewmodel.loadTodos();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
-      builder: (context, model, child) {
-        // return Flexible(
-        //   fit: FlexFit.tight,
-        //   child: ListView.builder(
-        //     itemCount: model.todos.length,
-        //     itemBuilder: (BuildContext context, int index) {
-        //       return Padding(
-        //         padding: const EdgeInsets.only(bottom: 10),
-        //         child: Container(
-        //           color: Colors.pink,
-        //           child: Row(
-        //             mainAxisAlignment: MainAxisAlignment.center,
-        //             children: [
-        //               // Text(todoItems[index]["index"].toString()),
-        //               // SizedBox(width: 100),
-        //               // Text(todoItems[index]["title"] as String),
-        //               Text(model.todos[index].index.toString()),
-        //               SizedBox(width: 100),
-        //               Text(model.todos[index].title),
-        //             ],
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        //   // child: ListView(
-        //   //   children: [
-        //   //     Text("Todo Listview"),
-        //   //     for (var todoItem in todoItems)
-
-        //   //   ],
-        //   // ),
-        // );
-
+      builder: (context, viewmodel, child) {
+        // for (var todo in viewmodel.todos) {
+        // }
         return SizedBox(
           width: 1000,
           height: 750,
@@ -262,7 +245,7 @@ class _TodoListViewState extends State<TodoListView> {
                     ),
                   ],
                 ),
-                for (var todo in model.todos)
+                for (var todo in viewmodel.todos)
                   TableRow(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.red),
@@ -298,14 +281,27 @@ class _TodoListViewState extends State<TodoListView> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          todo.id.toString(),
+                          todo.completedString,
                           textAlign: TextAlign.center,
                           style: globalTextStyle,
                         ),
                       ),
-                      Container(color: Colors.lightBlue),
+                      Container(
+                        color: Colors.lightBlue,
+                        child: IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            context.go('/todo/${todo.id}');
+                            // CreateTodoViewModel cvm = context.read();
+                            // cvm.todo.id = todo.id;
+                            // context.go('/todo/${cvm.todo.id}');
+                            // logger.i("edit button pressed ${cvm.todo.id}");
+                          },
+                        ),
+                      ),
                     ],
                   ),
+                // logger.i('ddd');
 
                 // TableRow(children: [Text("5"), Text("6"), Text("7"), Text("8")]),
                 // TableRow(children: [Text("1"), Text("2"), Text("3"), Text("4")]),

@@ -17,6 +17,7 @@ void main() async {
   var todos;
   var count;
   int maxCount = 100;
+  Todo newTodo;
 
   test('Creating a todo must succeed with HTTP 201.', () async {
     result = await dbService.searchTodos("Todo 1");
@@ -27,21 +28,22 @@ void main() async {
         await dbService.deleteTodo(todos[i].id);
       }
     } else if (count <= 0) {
-      result = await dbService.createTodo(
-        "Todo 1",
-        "This is the first todo. It should not be deleted",
-        DateTime.now(),
-        "simonque",
+      newTodo = Todo(
+        title: "Todo 1",
+        body: "This is the first todo. It should not be deleted",
+        dateModified: DateTime.now(),
+        writtenBy: "simonque",
       );
+      result = await dbService.createTodo(newTodo);
       expect(result, isA<Ok>());
     }
-
-    result = await dbService.createTodo(
-      "test todo ",
-      "test todo body text",
-      DateTime.now(),
-      "simonque",
+    newTodo = Todo(
+      title: "test todo ",
+      body: "test todo body text",
+      writtenBy: "simonque",
+      dateModified: DateTime.now(),
     );
+    result = await dbService.createTodo(newTodo);
     expect(result, isA<Ok>());
   });
 
@@ -88,15 +90,15 @@ void main() async {
   test(
     'Modifying a todo that exists must succeed with HTTP 200, and the object must be modified in the backend.',
     () async {
+      newTodo = Todo(
+        title: "modified title",
+        body: "modified body",
+        dateModified: DateTime.now(),
+        writtenBy: "simonque2",
+      );
       result = await dbService.getTodosPaginated(page: 1, limit: 2);
       Todo latestTodo = (result as Ok).value["todos"][0];
-      result = await dbService.updateTodo(
-        latestTodo.id,
-        "modified title",
-        "modified body",
-        DateTime.now(),
-        "simonque2",
-      );
+      result = await dbService.updateTodo(latestTodo.id, newTodo);
       expect(result, isA<Ok>());
       result = await dbService.getTodo(latestTodo.id);
       latestTodo = (result as Ok).value["todo"];
