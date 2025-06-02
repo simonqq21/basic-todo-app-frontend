@@ -1,4 +1,5 @@
 // import 'dart:collection';
+import 'package:basic_todo_app_frontend/viewmodels/createnoteviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +12,8 @@ import 'package:basic_todo_app_frontend/viewmodels/viewnoteviewmodel.dart';
 import 'utils/logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'package:basic_todo_app_frontend/views/createnoteview.dart';
+
 Future main() async {
   // runApp(MyApp());
   await dotenv.load(fileName: ".env");
@@ -19,7 +22,8 @@ Future main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomeViewModel()),
-        ChangeNotifierProvider(create: (context) => CreateTodoViewModel()),
+        ChangeNotifierProvider(create: (context) => CreateNoteViewModel()),
+        ChangeNotifierProvider(create: (context) => ViewNoteViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -36,11 +40,12 @@ class MyApp extends StatelessWidget {
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
       GoRoute(path: '/', builder: (context, state) => HomePage()),
+      GoRoute(path: '/todox', builder: (context, state) => CreateNotePage()),
       GoRoute(
         path: '/todo/:id',
         builder:
             (context, state) =>
-                SingleTodoPage(id: int.parse(state.pathParameters['id'] ?? "")),
+                ViewNotePage(id: int.parse(state.pathParameters['id'] ?? "")),
       ),
     ],
   );

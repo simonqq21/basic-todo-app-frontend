@@ -23,7 +23,7 @@ class AppRepo {
   }
 
   // load todo
-  Future<Result<Note>> loadTodo(int id) async {
+  Future<Result<Note>> loadNote(int id) async {
     Result result = await todoDbService.getTodo(id);
     if (result is Ok) {
       Note todo = result.value["todo"];
@@ -34,7 +34,7 @@ class AppRepo {
   }
 
   // create todo
-  Future<Result> createTodo(Note newTodo) async {
+  Future<Result> createNote(Note newTodo) async {
     Result result = await todoDbService.createTodo(newTodo);
     if (result is Ok) {
       return Result.ok(null);

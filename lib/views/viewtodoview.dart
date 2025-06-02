@@ -25,16 +25,16 @@ class SingleTodoPageState extends State<SingleTodoPage> {
 
   @override
   void initState() {
-    CreateTodoViewModel viewmodel = context.read();
-    viewmodel.todo.id = widget.id;
-    logger.i("create todo view model id = ${viewmodel.todo.id}");
-    viewmodel.loadTodo(viewmodel.todo.id);
+    ViewNoteViewModel viewmodel = context.read();
+    viewmodel.note.id = widget.id;
+    logger.i("create todo view model id = ${viewmodel.note.id}");
+    viewmodel.loadTodo(viewmodel.note.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    CreateTodoViewModel viewmodel = context.read();
-    return NotesForm(title: "edit", id: viewmodel.todo.id);
+    ViewNoteViewModel viewmodel = context.read();
+    return NotesForm(title: "edit", id: viewmodel.note.id);
   }
 }

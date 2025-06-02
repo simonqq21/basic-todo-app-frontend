@@ -6,11 +6,10 @@ import 'package:basic_todo_app_frontend/views/common.dart';
 import 'package:basic_todo_app_frontend/viewmodels/viewnoteviewmodel.dart';
 
 class NotesForm extends StatefulWidget {
-  final int id;
   final String title;
   String titleText = "";
   Icon? actionButtonIcon;
-  NotesForm({super.key, this.title = "create", this.id = 0}) {
+  NotesForm({super.key, this.title = "create"}) {
     switch (title) {
       case "create":
         titleText = "Create a Note";
@@ -33,7 +32,7 @@ class NotesForm extends StatefulWidget {
 class NotesFormState extends State<NotesForm> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<CreateTodoViewModel>(
+    return Consumer<ViewNoteViewModel>(
       builder: (context, viewmodel, child) {
         return Scaffold(
           appBar: AppBar(
@@ -125,7 +124,7 @@ class NotesFormState extends State<NotesForm> {
                                   children: [
                                     Text("Completed: "),
                                     Checkbox(
-                                      value: viewmodel.todo.completed,
+                                      value: viewmodel.note.completed,
                                       // tristate: true,
                                       // onChanged: (bool? val) {
                                       //   // setState(() {});
@@ -134,13 +133,13 @@ class NotesFormState extends State<NotesForm> {
                                       // },
                                       onChanged: (bool? val) {
                                         setState(() {
-                                          viewmodel.todo.completed =
+                                          viewmodel.note.completed =
                                               val ?? false;
                                         });
                                         // viewmodel.completed = val;
                                         // logger.i('$val => ${viewmodel.completed}');
                                         logger.i(
-                                          '$val => ${viewmodel.todo.completed}',
+                                          '$val => ${viewmodel.note.completed}',
                                         );
                                       },
                                     ),

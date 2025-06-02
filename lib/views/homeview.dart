@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
               //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
               // );
               // context.push('/todo');
-              context.go('/todo');
+              context.go('/todox');
             },
             tooltip: "create a todo",
             child: const Icon(Icons.add),

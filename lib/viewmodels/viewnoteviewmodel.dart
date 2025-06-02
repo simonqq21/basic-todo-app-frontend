@@ -4,24 +4,24 @@ import 'package:basic_todo_app_frontend/utils/logger.dart';
 import 'package:basic_todo_app_frontend/data/repositories/apprepo.dart';
 import 'package:basic_todo_app_frontend/utils/result.dart';
 
-class CreateTodoViewModel extends ChangeNotifier {
+class ViewNoteViewModel extends ChangeNotifier {
   final AppRepo _repo = AppRepo();
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  Note _todo = Note(title: "", body: "");
+  Note _note = Note(title: "", body: "");
 
-  Note get todo => _todo;
+  Note get note => _note;
 
   Future<void> loadTodo(int id) async {
-    Result result = await _repo.loadTodo(id);
+    Result result = await _repo.loadNote(id);
     if (result is Ok) {
-      _todo = result.value;
-      titleController.text = _todo.title;
-      bodyController.text = _todo.body;
+      _note = result.value;
+      titleController.text = _note.title;
+      bodyController.text = _note.body;
     } else {
-      logger.e("error loading todo1");
+      logger.e("error loading note1");
     }
     notifyListeners();
   }
@@ -30,7 +30,7 @@ class CreateTodoViewModel extends ChangeNotifier {
     final form = formKey.currentState;
     if (form!.validate()) {
       logger.i("mnopqr");
-      _todo = Note(id: 1, title: titleController.text, body: "body123");
+      _note = Note(id: 1, title: titleController.text, body: "body123");
       notifyListeners();
       return true;
     }
