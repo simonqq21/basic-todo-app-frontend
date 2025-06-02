@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_getters_setters
 
-class Todo {
+class Note {
   int _id = 0;
   DateTime _dateModified;
   String _title = "";
@@ -8,7 +8,7 @@ class Todo {
   String _writtenBy = "";
   bool _completed = false;
 
-  Todo({
+  Note({
     required String title,
     required String body,
     DateTime? dateModified,
@@ -22,8 +22,8 @@ class Todo {
        _writtenBy = writtenBy ?? "default",
        _completed = completed ?? false;
 
-  factory Todo.fromJSON(Map<String, dynamic> json) {
-    return Todo(
+  factory Note.fromJSON(Map<String, dynamic> json) {
+    return Note(
       id: json['id'] as int,
       title: json['title'] as String,
       body: json['body'] as String,

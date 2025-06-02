@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:basic_todo_app_frontend/utils/logger.dart';
-import 'package:basic_todo_app_frontend/data/models/todo.dart';
+import 'package:basic_todo_app_frontend/data/models/note.dart';
 import 'package:basic_todo_app_frontend/utils/result.dart';
 import 'package:collection/collection.dart';
 
@@ -14,13 +14,13 @@ class TodoDBService {
 
   // get a single Todo
   Future<Result<Map>> getTodo(int id) async {
-    Todo todo;
+    Note todo;
     try {
       final response = await http.get(Uri.parse("$_baseURL/todos/$id"));
       // logger.d("response statuscode = ${response.statusCode}");
       if (response.statusCode == 200) {
         var x = jsonDecode(response.body)["todo"] as Map<String, dynamic>;
-        todo = Todo.fromJSON(
+        todo = Note.fromJSON(
           jsonDecode(response.body)["todo"] as Map<String, dynamic>,
         );
         return Result.ok({'todo': todo});
@@ -37,7 +37,7 @@ class TodoDBService {
   Future<Result<Map>> getTodosPaginated({int? page, int? limit}) async {
     page = page ?? 1;
     limit = limit ?? 10;
-    List<Todo> todos = [];
+    List<Note> todos = [];
 
     try {
       final response = await http.get(
@@ -48,7 +48,7 @@ class TodoDBService {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
         body['todos'].forEach((t) {
-          todos.add(Todo.fromJSON(t as Map<String, dynamic>));
+          todos.add(Note.fromJSON(t as Map<String, dynamic>));
         });
         return Result.ok({'todos': todos, 'count': body['count']});
       } else {
@@ -68,7 +68,7 @@ class TodoDBService {
   }) async {
     page = page ?? 1;
     limit = limit ?? 10;
-    List<Todo> todos = [];
+    List<Note> todos = [];
 
     try {
       final response = await http.get(
@@ -79,7 +79,7 @@ class TodoDBService {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
         body['todos'].forEach((t) {
-          todos.add(Todo.fromJSON(t as Map<String, dynamic>));
+          todos.add(Note.fromJSON(t as Map<String, dynamic>));
         });
         return Result.ok({'todos': todos, 'count': body['count']});
       } else {
@@ -97,7 +97,7 @@ class TodoDBService {
     // String body,
     // DateTime datecreated,
     // String writtenBy,
-    Todo newTodo,
+    Note newTodo,
   ) async {
     try {
       final response = await http.post(
@@ -124,7 +124,7 @@ class TodoDBService {
   }
 
   // put a single Todo
-  Future<Result<Map>> updateTodo(int id, Todo newTodo) async {
+  Future<Result<Map>> updateTodo(int id, Note newTodo) async {
     try {
       final response = await http.put(
         Uri.parse("$_baseURL/todos/$id"),

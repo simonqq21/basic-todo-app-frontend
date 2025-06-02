@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:basic_todo_app_frontend/viewmodels/homeviewmodel.dart';
 import 'package:basic_todo_app_frontend/views/homeview.dart';
 
-import 'package:basic_todo_app_frontend/views/createtodoview.dart';
-import 'package:basic_todo_app_frontend/viewmodels/createtodoviewmodel.dart';
+import 'package:basic_todo_app_frontend/views/viewnoteview.dart';
+import 'package:basic_todo_app_frontend/viewmodels/viewnoteviewmodel.dart';
 import 'utils/logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

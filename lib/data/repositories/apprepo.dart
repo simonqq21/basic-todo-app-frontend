@@ -1,14 +1,14 @@
 import 'package:basic_todo_app_frontend/data/services/dbservice.dart';
 import 'package:basic_todo_app_frontend/utils/result.dart';
-import '../models/todo.dart';
+import '../models/note.dart';
 import '../../utils/logger.dart';
-export '../models/todo.dart';
+export '../models/note.dart';
 
 class AppRepo {
   TodoDBService todoDbService = TodoDBService();
 
   // load todos paginated
-  Future<Result<List<Todo>>> loadTodos(int? page, int? limit) async {
+  Future<Result<List<Note>>> loadTodos(int? page, int? limit) async {
     page = page ?? 1;
     limit = limit ?? 10;
     Result result = await todoDbService.getTodosPaginated(
@@ -23,10 +23,10 @@ class AppRepo {
   }
 
   // load todo
-  Future<Result<Todo>> loadTodo(int id) async {
+  Future<Result<Note>> loadTodo(int id) async {
     Result result = await todoDbService.getTodo(id);
     if (result is Ok) {
-      Todo todo = result.value["todo"];
+      Note todo = result.value["todo"];
       return Result.ok(todo);
     } else {
       return Result.error(Exception("Error getting todo from db."));
@@ -34,7 +34,7 @@ class AppRepo {
   }
 
   // create todo
-  Future<Result> createTodo(Todo newTodo) async {
+  Future<Result> createTodo(Note newTodo) async {
     Result result = await todoDbService.createTodo(newTodo);
     if (result is Ok) {
       return Result.ok(null);
@@ -44,7 +44,7 @@ class AppRepo {
   }
 
   // edit todo
-  Future<Result> editTodo(int id, Todo newTodo) async {
+  Future<Result> editTodo(int id, Note newTodo) async {
     Result result = await todoDbService.updateTodo(id, newTodo);
     if (result is Ok) {
       return Result.ok(null);

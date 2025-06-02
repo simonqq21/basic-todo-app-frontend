@@ -1,7 +1,7 @@
 import 'dart:convert';
 @Timeout(Duration(seconds: 9000))
 import 'package:test/test.dart';
-import 'package:basic_todo_app_frontend/data/models/todo.dart';
+import 'package:basic_todo_app_frontend/data/models/note.dart';
 import 'package:basic_todo_app_frontend/utils/result.dart';
 import 'package:basic_todo_app_frontend/data/services/dbservice.dart';
 // import '../data/services/dbservice.dart';
@@ -13,11 +13,11 @@ void main() async {
   await dotenv.load(fileName: ".env");
   TodoDBService dbService = TodoDBService();
   Result result;
-  Todo latestTodo;
+  Note latestTodo;
   var todos;
   var count;
   int maxCount = 100;
-  Todo newTodo;
+  Note newTodo;
 
   test('Creating a todo must succeed with HTTP 201.', () async {
     result = await dbService.searchTodos("Todo 1");
@@ -28,7 +28,7 @@ void main() async {
         await dbService.deleteTodo(todos[i].id);
       }
     } else if (count <= 0) {
-      newTodo = Todo(
+      newTodo = Note(
         title: "Todo 1",
         body: "This is the first todo. It should not be deleted",
         dateModified: DateTime.now(),
@@ -37,7 +37,7 @@ void main() async {
       result = await dbService.createTodo(newTodo);
       expect(result, isA<Ok>());
     }
-    newTodo = Todo(
+    newTodo = Note(
       title: "test todo ",
       body: "test todo body text",
       writtenBy: "simonque",
@@ -90,14 +90,14 @@ void main() async {
   test(
     'Modifying a todo that exists must succeed with HTTP 200, and the object must be modified in the backend.',
     () async {
-      newTodo = Todo(
+      newTodo = Note(
         title: "modified title",
         body: "modified body",
         dateModified: DateTime.now(),
         writtenBy: "simonque2",
       );
       result = await dbService.getTodosPaginated(page: 1, limit: 2);
-      Todo latestTodo = (result as Ok).value["todos"][0];
+      Note latestTodo = (result as Ok).value["todos"][0];
       result = await dbService.updateTodo(latestTodo.id, newTodo);
       expect(result, isA<Ok>());
       result = await dbService.getTodo(latestTodo.id);

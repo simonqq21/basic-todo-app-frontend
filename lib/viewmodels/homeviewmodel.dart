@@ -7,7 +7,7 @@ import 'package:basic_todo_app_frontend/utils/result.dart';
 class HomeViewModel extends ChangeNotifier {
   final AppRepo _repo = AppRepo();
 
-  List<Todo> _todos = [];
+  List<Note> _todos = [];
   int _page;
   int _limit;
 
@@ -18,7 +18,7 @@ class HomeViewModel extends ChangeNotifier {
   set limit(int val) => _limit = val;
 
   HomeViewModel({int page = 1, int limit = 10}) : _limit = limit, _page = page;
-  List<Todo> get todos => _todos;
+  List<Note> get todos => _todos;
 
   // UnmodifiableListView<Todo> get todos => UnmodifiableListView(_todos);
 

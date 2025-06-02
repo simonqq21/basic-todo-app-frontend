@@ -3,43 +3,48 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:basic_todo_app_frontend/utils/logger.dart';
 import 'package:basic_todo_app_frontend/views/common.dart';
-import 'package:basic_todo_app_frontend/viewmodels/createtodoviewmodel.dart';
+import 'package:basic_todo_app_frontend/viewmodels/viewnoteviewmodel.dart';
 
-/// class for viewing a single todo
-class SingleTodoPage extends StatefulWidget {
+class NotesForm extends StatefulWidget {
   final int id;
-  const SingleTodoPage({super.key, this.id = 0});
-
-  @override
-  SingleTodoPageState createState() => SingleTodoPageState();
-}
-
-class SingleTodoPageState extends State<SingleTodoPage> {
-  // bool? v1 = false;
-
-  // SingleTodoPageState() {
-  //   CreateTodoViewModel viewmodel = context.read();
-  //   viewmodel.todo.id = id;
-  // }
-
-  @override
-  void initState() {
-    CreateTodoViewModel viewmodel = context.read();
-    viewmodel.todo.id = widget.id;
-    logger.i("create todo view model id = ${viewmodel.todo.id}");
-    viewmodel.loadTodo(viewmodel.todo.id);
-    super.initState();
+  final String title;
+  String titleText = "";
+  Icon? actionButtonIcon;
+  NotesForm({super.key, this.title = "create", this.id = 0}) {
+    switch (title) {
+      case "create":
+        titleText = "Create a Note";
+        actionButtonIcon = Icon(Icons.save);
+        break;
+      case "view":
+        titleText = "View a Note";
+        actionButtonIcon = Icon(Icons.edit);
+        break;
+      default:
+        titleText = "Edit a Note";
+        actionButtonIcon = Icon(Icons.save);
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
-    // logger.i("xyz");
+  NotesFormState createState() => NotesFormState();
+}
 
+class NotesFormState extends State<NotesForm> {
+  @override
+  Widget build(BuildContext context) {
     return Consumer<CreateTodoViewModel>(
       builder: (context, viewmodel, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Center(child: Text("Single Todo View Edit Page")),
+            leading: IconButton(
+              onPressed: () {
+                // context.pop();
+                context.go('/');
+              },
+              icon: Icon(Icons.arrow_back),
+            ),
+            title: Center(child: Text(widget.titleText)),
           ),
           body: Container(
             padding: EdgeInsets.only(top: 25),
@@ -51,7 +56,6 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                 key: viewmodel.formKey,
                 child: Column(
                   children: [
-                    Text("Single Todo View Edit Page"),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -83,7 +87,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                     SizedBox(height: 20),
                     SizedBox(
                       width: 1200,
-                      height: 500,
+                      height: 600,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -91,6 +95,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Body"),
+                              SizedBox(height: 20),
                               SizedBox(
                                 width: 600,
                                 height: 480,
@@ -149,38 +154,43 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                     ),
                     SizedBox(height: 20),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          // onPressed: () => context.go('/'),
-                          onPressed: () {
-                            // context.pop();
-                            context.go('/');
-                          },
-                          child: const Text('Go to the home screen'),
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (viewmodel.validateAndSave()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'You entered title ${viewmodel.todo.title}!',
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                          child: Text('Submit'),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     SizedBox(height: 10),
+                    //     ElevatedButton(
+                    //       onPressed: () {
+                    //         if (viewmodel.validateAndSave()) {
+                    //           ScaffoldMessenger.of(context).showSnackBar(
+                    //             SnackBar(
+                    //               content: Text(
+                    //                 'You entered title ${viewmodel.todo.title}!',
+                    //               ),
+                    //             ),
+                    //           );
+                    //         }
+                    //       },
+                    //       child: Text('Submit'),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              logger.d("save note button pressed");
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
+              // );
+              // context.push('/todo');
+              context.go('/todo');
+            },
+            tooltip: "Save note",
+            child: widget.actionButtonIcon,
           ),
         );
       },

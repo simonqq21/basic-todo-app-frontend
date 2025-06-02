@@ -10,9 +10,9 @@ class CreateTodoViewModel extends ChangeNotifier {
   final bodyController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  Todo _todo = Todo(title: "", body: "");
+  Note _todo = Note(title: "", body: "");
 
-  Todo get todo => _todo;
+  Note get todo => _todo;
 
   Future<void> loadTodo(int id) async {
     Result result = await _repo.loadTodo(id);
@@ -30,7 +30,7 @@ class CreateTodoViewModel extends ChangeNotifier {
     final form = formKey.currentState;
     if (form!.validate()) {
       logger.i("mnopqr");
-      _todo = Todo(id: 1, title: titleController.text, body: "body123");
+      _todo = Note(id: 1, title: titleController.text, body: "body123");
       notifyListeners();
       return true;
     }
