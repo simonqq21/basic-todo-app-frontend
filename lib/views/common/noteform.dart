@@ -6,30 +6,60 @@ import 'package:basic_todo_app_frontend/views/common.dart';
 import 'package:basic_todo_app_frontend/viewmodels/viewnoteviewmodel.dart';
 
 class NotesForm extends StatefulWidget {
-  final String title;
-  String titleText = "";
-  Icon? actionButtonIcon;
-  NotesForm({super.key, this.title = "create"}) {
-    switch (title) {
-      case "create":
-        titleText = "Create a Note";
-        actionButtonIcon = Icon(Icons.save);
-        break;
-      case "view":
-        titleText = "View a Note";
-        actionButtonIcon = Icon(Icons.edit);
-        break;
-      default:
-        titleText = "Edit a Note";
-        actionButtonIcon = Icon(Icons.save);
-    }
-  }
+  final String mode;
+
+  NotesForm({super.key, this.mode = "create"}) {}
 
   @override
   NotesFormState createState() => NotesFormState();
 }
 
 class NotesFormState extends State<NotesForm> {
+  String titleText = "";
+  Icon? actionButtonIcon;
+  var onPressed;
+  @override
+  void initState() {
+    switch (widget.mode) {
+      case "create":
+        titleText = "Create a Note";
+        actionButtonIcon = Icon(Icons.save);
+        onPressed = () {
+          logger.d("save new note button pressed");
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
+          // );
+          // context.push('/todo');
+          context.go('/');
+        };
+        break;
+      case "view":
+        titleText = "View a Note";
+        actionButtonIcon = Icon(Icons.edit);
+        onPressed = () {
+          logger.d("edit note button pressed");
+          setState(() {
+            actionButtonIcon = Icon(Icons.save);
+
+            onPressed = () {
+              logger.d("save modified note button pressed");
+              context.go('/');
+            };
+          });
+        };
+        break;
+      default:
+        titleText = "Edit a Note";
+        actionButtonIcon = Icon(Icons.save);
+        onPressed = () {
+          logger.d("save modified note button pressed");
+          context.go('/');
+        };
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ViewNoteViewModel>(
@@ -43,7 +73,7 @@ class NotesFormState extends State<NotesForm> {
               },
               icon: Icon(Icons.arrow_back),
             ),
-            title: Center(child: Text(widget.titleText)),
+            title: Center(child: Text(titleText)),
           ),
           body: Container(
             padding: EdgeInsets.only(top: 25),
@@ -179,17 +209,9 @@ class NotesFormState extends State<NotesForm> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              logger.d("save note button pressed");
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
-              // );
-              // context.push('/todo');
-              context.go('/todo');
-            },
+            onPressed: onPressed,
             tooltip: "Save note",
-            child: widget.actionButtonIcon,
+            child: actionButtonIcon,
           ),
         );
       },

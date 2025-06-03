@@ -25,6 +25,6 @@ class CreateNotePageState extends State<CreateNotePage> {
   @override
   Widget build(BuildContext context) {
     CreateNoteViewModel viewmodel = context.read();
-    return NotesForm(title: "create");
+    return NotesForm(mode: "create");
   }
 }

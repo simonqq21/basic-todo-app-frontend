@@ -7,45 +7,57 @@ import 'package:basic_todo_app_frontend/utils/result.dart';
 class HomeViewModel extends ChangeNotifier {
   final AppRepo _repo = AppRepo();
 
-  List<Note> _todos = [];
+  List<Note> _notes = [];
   int _page;
   int _limit;
-
-  int get page => _page;
-  set page(int val) => _page = val;
-
-  int get limit => _limit;
-  set limit(int val) => _limit = val;
+  bool _selectVisibility = false;
 
   HomeViewModel({int page = 1, int limit = 10}) : _limit = limit, _page = page;
-  List<Note> get todos => _todos;
 
-  // UnmodifiableListView<Todo> get todos => UnmodifiableListView(_todos);
+  bool get selectVisibility => _selectVisibility;
+  set selectVisibility(val) {
+    _selectVisibility = val;
+    notifyListeners();
+  }
 
+  int get page => _page;
+  set page(int val) {
+    _page = val;
+    notifyListeners();
+  }
+
+  int get limit => _limit;
+  set limit(int val) {
+    _limit = val;
+    notifyListeners();
+  }
+
+  List<Note> get notes => _notes;
   // load todos paginated
-  Future<void> loadTodos({int page = 1, int limit = 10}) async {
-    Result result = await _repo.loadTodos(page, limit);
+  Future<void> loadNotes({int page = 1, int limit = 10}) async {
+    Result result = await _repo.loadNotes(page, limit);
     if (result is Ok) {
-      logger.i('success loading todos');
-      _todos = result.value;
+      logger.i('success loading notes');
+      _notes = result.value;
     } else {
-      logger.e("error loading todos");
+      logger.e("error loading notes");
     }
     notifyListeners();
   }
 
   // delete a todo
-  Future<void> deleteTodo(int id) async {
-    Result result = await _repo.deleteTodo(id);
+  Future<void> deleteNote(int id) async {
+    Result result = await _repo.deleteNote(id);
     if (result is Ok) {
-      logger.i('success deleting todo');
-      _todos = result.value;
+      logger.i('success deleting note');
+      _notes = result.value;
     } else {
-      logger.e("error deleting todo");
+      logger.e("error deleting note");
     }
-    await loadTodos(page: _page, limit: _limit);
+    await loadNotes(page: _page, limit: _limit);
     notifyListeners();
   }
+
   // void add() {
   //   _todos.add(
   //     Todo(

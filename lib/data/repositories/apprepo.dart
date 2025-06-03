@@ -8,7 +8,7 @@ class AppRepo {
   TodoDBService todoDbService = TodoDBService();
 
   // load todos paginated
-  Future<Result<List<Note>>> loadTodos(int? page, int? limit) async {
+  Future<Result<List<Note>>> loadNotes(int? page, int? limit) async {
     page = page ?? 1;
     limit = limit ?? 10;
     Result result = await todoDbService.getTodosPaginated(
@@ -54,7 +54,7 @@ class AppRepo {
   }
 
   // delete a todo
-  Future<Result> deleteTodo(int id) async {
+  Future<Result> deleteNote(int id) async {
     Result result = await todoDbService.deleteTodo(id);
     if (result is Ok) {
       return Result.ok(null);

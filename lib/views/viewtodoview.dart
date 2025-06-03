@@ -35,6 +35,6 @@ class SingleTodoPageState extends State<SingleTodoPage> {
   @override
   Widget build(BuildContext context) {
     ViewNoteViewModel viewmodel = context.read();
-    return NotesForm(title: "edit", id: viewmodel.note.id);
+    return NotesForm(mode: "edit");
   }
 }

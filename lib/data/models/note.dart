@@ -7,6 +7,7 @@ class Note {
   String _body = "";
   String _writtenBy = "";
   bool _completed = false;
+  bool _selected = false;
 
   Note({
     required String title,
@@ -74,5 +75,10 @@ class Note {
   String get body => _body;
   set body(String value) {
     _body = value;
+  }
+
+  bool get selected => _selected;
+  set selected(val) {
+    _selected = val;
   }
 }

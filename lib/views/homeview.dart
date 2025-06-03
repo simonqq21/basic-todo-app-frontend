@@ -4,6 +4,7 @@ import 'package:basic_todo_app_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:basic_todo_app_frontend/viewmodels/homeviewmodel.dart';
+import 'package:basic_todo_app_frontend/data/models/note.dart';
 import 'common.dart';
 
 // class for viewing a list of all todos paginated
@@ -15,7 +16,7 @@ class HomePage extends StatelessWidget {
       builder: (BuildContext context, HomeViewModel value, Widget? child) {
         return Scaffold(
           appBar: AppBar(
-            title: Center(child: Text("Simonqq21's todo app yeehaw")),
+            title: Center(child: Text("Simonqq21's notes app yeehaw")),
           ),
           body: Container(
             padding: EdgeInsets.only(top: 25),
@@ -26,7 +27,8 @@ class HomePage extends StatelessWidget {
               child: Column(
                 children: [
                   TodoTableHeaderBar(),
-                  TodoListView(),
+                  SizedBox(height: 20),
+                  TodoListView(), SizedBox(height: 20),
                   PaginationFooter(),
                   // Text("Home page"),
                   // ElevatedButton(
@@ -45,9 +47,9 @@ class HomePage extends StatelessWidget {
               //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
               // );
               // context.push('/todo');
-              context.go('/todox');
+              context.go('/notes/create');
             },
-            tooltip: "create a todo",
+            tooltip: "create a note",
             child: const Icon(Icons.add),
           ),
         );
@@ -73,7 +75,7 @@ class ActionButtonBar extends StatefulWidget {
 }
 
 class _ActionButtonBarState extends State<ActionButtonBar> {
-  var selectAllBtnVisibility = false;
+  var selectVisibility = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
@@ -81,28 +83,72 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            TextButton(
-              // style: ButtonStyle(
-              //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
-              //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
-              // ),
-              onPressed: () {
-                logger.i("Select pressed");
-                setState(() {
-                  selectAllBtnVisibility = !selectAllBtnVisibility;
-                });
-                // viewmodel.add();
-              },
-              child: Text("Select", style: globalTextStyle),
+            Visibility(
+              visible: !viewmodel.selectVisibility,
+              child: TextButton(
+                // style: ButtonStyle(
+                //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
+                //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                // ),
+                onPressed: () {
+                  logger.i("Select pressed");
+                  setState(() {
+                    viewmodel.selectVisibility = !viewmodel.selectVisibility;
+                  });
+                  // viewmodel.add();
+                },
+                child: Text("Select", style: globalTextStyle),
+              ),
             ),
             Visibility(
-              visible: selectAllBtnVisibility,
+              visible: viewmodel.selectVisibility,
+              child: TextButton(
+                // style: ButtonStyle(
+                //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
+                //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                // ),
+                onPressed: () {
+                  setState(() {
+                    viewmodel.selectVisibility = !viewmodel.selectVisibility;
+                    for (Note note in viewmodel.notes) {
+                      note.selected = false;
+                    }
+                  });
+                  viewmodel.notifyListeners();
+                  logger.i("Unselect pressed");
+                },
+                child: Text("Unselect", style: globalTextStyle),
+              ),
+            ),
+            Visibility(
+              visible: viewmodel.selectVisibility,
               child: TextButton(
                 onPressed: () {
+                  setState(() {
+                    for (Note note in viewmodel.notes) {
+                      note.selected = true;
+                    }
+                  });
+                  viewmodel.notifyListeners();
                   logger.i("Select All pressed");
                   // viewmodel.removeAll();
                 },
                 child: Text("Select All", style: globalTextStyle),
+              ),
+            ),
+            Visibility(
+              visible: viewmodel.selectVisibility,
+              child: TextButton(
+                onPressed: () {
+                  logger.i("delete pressed");
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll<Color>(Colors.red),
+                ),
+                child: Text(
+                  "Delete",
+                  style: globalTextStyle.merge(TextStyle()),
+                ),
               ),
             ),
           ],
@@ -111,24 +157,6 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
     );
   }
 }
-
-// class TodoTableHeader extends StatelessWidget {
-//   const TodoTableHeader({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//       children: [
-//         // Container(width: 100, height: 50, color: Colors.green),
-//         // Container(width: 100, height: 50, color: Colors.red),
-//         Text("Modified"),
-//         Text("Title"),
-//         Text("Completed"),
-//       ],
-//     );
-//   }
-// }
 
 class TodoListView extends StatefulWidget {
   const TodoListView({super.key});
@@ -164,7 +192,7 @@ class _TodoListViewState extends State<TodoListView> {
   @override
   void initState() {
     HomeViewModel viewmodel = context.read();
-    viewmodel.loadTodos();
+    viewmodel.loadNotes();
     super.initState();
   }
 
@@ -245,7 +273,7 @@ class _TodoListViewState extends State<TodoListView> {
                     ),
                   ],
                 ),
-                for (var todo in viewmodel.todos)
+                for (var note in viewmodel.notes)
                   TableRow(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.red),
@@ -255,7 +283,7 @@ class _TodoListViewState extends State<TodoListView> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          todo.id.toString(),
+                          note.id.toString(),
                           textAlign: TextAlign.center,
                           style: globalTextStyle,
                         ),
@@ -264,7 +292,7 @@ class _TodoListViewState extends State<TodoListView> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          todo.dateModified.toString(),
+                          note.dateModified.toString(),
                           textAlign: TextAlign.center,
                           style: globalTextStyle,
                         ),
@@ -273,7 +301,7 @@ class _TodoListViewState extends State<TodoListView> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          todo.title.toString(),
+                          note.title.toString(),
                           style: globalTextStyle,
                         ),
                       ),
@@ -281,22 +309,41 @@ class _TodoListViewState extends State<TodoListView> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          todo.completedString,
+                          note.completedString,
                           textAlign: TextAlign.center,
                           style: globalTextStyle,
                         ),
                       ),
                       Container(
-                        color: Colors.lightBlue,
-                        child: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            context.go('/todo/${todo.id}');
-                            // CreateTodoViewModel cvm = context.read();
-                            // cvm.todo.id = todo.id;
-                            // context.go('/todo/${cvm.todo.id}');
-                            // logger.i("edit button pressed ${cvm.todo.id}");
-                          },
+                        height: 60,
+                        // color: Colors.deepPurple,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              style: IconButton.styleFrom(
+                                minimumSize: Size(40, 40),
+                                backgroundColor: Colors.blueAccent,
+                              ),
+                              onPressed: () {
+                                context.go('/notes/${note.id}');
+                              },
+                            ),
+                            Visibility(
+                              visible: viewmodel.selectVisibility,
+                              child: Checkbox(
+                                value: note.selected,
+                                onChanged: (bool? val) {
+                                  setState(() {
+                                    note.selected = val ?? false;
+                                  });
+                                  logger.i("${note.selected}");
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
