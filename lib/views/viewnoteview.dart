@@ -34,7 +34,16 @@ class ViewNotePageState extends State<ViewNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    ViewNoteViewModel viewmodel = context.read();
-    return NotesForm(mode: "view");
+    return Consumer<ViewNoteViewModel>(
+      builder: (context, viewmodel, child) {
+        return NotesForm(
+          mode: "view",
+          formKey: viewmodel.formKey,
+          bodyController: viewmodel.bodyController,
+          titleController: viewmodel.titleController,
+          note: viewmodel.note,
+        );
+      },
+    );
   }
 }

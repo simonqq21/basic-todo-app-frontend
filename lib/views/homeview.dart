@@ -28,8 +28,10 @@ class HomePage extends StatelessWidget {
                 children: [
                   TodoTableHeaderBar(),
                   SizedBox(height: 20),
-                  TodoListView(), SizedBox(height: 20),
+                  TodoListView(),
+                  SizedBox(height: 20),
                   PaginationFooter(),
+                  SizedBox(height: 20),
                   // Text("Home page"),
                   // ElevatedButton(
                   //   onPressed: () => context.go('/todo'),
@@ -204,7 +206,7 @@ class _TodoListViewState extends State<TodoListView> {
         // }
         return SizedBox(
           width: 1000,
-          height: 750,
+          height: 700,
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Table(

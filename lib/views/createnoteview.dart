@@ -18,13 +18,23 @@ class CreateNotePage extends StatefulWidget {
 class CreateNotePageState extends State<CreateNotePage> {
   @override
   void initState() {
-    CreateNoteViewModel viewmodel = context.read();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    CreateNoteViewModel viewmodel = context.read();
-    return NotesForm(mode: "create");
+    return Consumer<CreateNoteViewModel>(
+      builder: (context, viewmodel, child) {
+        return NotesForm(
+          mode: "create",
+          formKey: viewmodel.formKey,
+          bodyController: viewmodel.bodyController,
+          titleController: viewmodel.titleController,
+          note: viewmodel.note,
+        );
+      },
+    );
+    // CreateNoteViewModel viewmodel = context.read();
+    // return NotesForm(mode: "create");
   }
 }
