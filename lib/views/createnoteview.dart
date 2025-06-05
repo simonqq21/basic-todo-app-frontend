@@ -31,6 +31,12 @@ class CreateNotePageState extends State<CreateNotePage> {
           bodyController: viewmodel.bodyController,
           titleController: viewmodel.titleController,
           note: viewmodel.note,
+          submitAction: viewmodel.validateAndSave,
+          // onPressed: () async {
+          //   logger.i("create note onPressed is a constructor parameter!");
+          //   await viewmodel.createNote(note)
+          //   context.go('/');
+          // },
         );
       },
     );

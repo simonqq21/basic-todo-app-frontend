@@ -1,3 +1,3 @@
 import 'package:flutter/material.dart';
 
-var globalTextStyle = TextStyle(fontSize: 20);
+var globalTextStyle = TextStyle(fontSize: 18);

@@ -29,8 +29,13 @@ class CreateNoteViewModel extends ChangeNotifier {
   bool validateAndSave() {
     final form = formKey.currentState;
     if (form!.validate()) {
-      // logger.i("mnopqr");
-      // _note = Note(id: 1, title: titleController.text, body: "body123");
+      _note = Note(
+        id: 1,
+        title: titleController.text,
+        body: bodyController.text,
+        completed: _note.completed,
+        dateModified: DateTime.now(),
+      );
       notifyListeners();
       return true;
     }

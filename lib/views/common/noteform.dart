@@ -11,6 +11,8 @@ class NotesForm extends StatefulWidget {
   final TextEditingController? titleController;
   final TextEditingController? bodyController;
   final Note? note;
+  var onPressed;
+  var submitAction;
 
   NotesForm({
     super.key,
@@ -19,6 +21,7 @@ class NotesForm extends StatefulWidget {
     this.titleController,
     this.bodyController,
     this.note,
+    this.submitAction,
   });
 
   @override
@@ -28,7 +31,6 @@ class NotesForm extends StatefulWidget {
 class NotesFormState extends State<NotesForm> {
   String titleText = "";
   Icon? actionButtonIcon;
-  var onPressed;
 
   @override
   void initState() {
@@ -36,25 +38,29 @@ class NotesFormState extends State<NotesForm> {
       case "create":
         titleText = "Create a Note";
         actionButtonIcon = Icon(Icons.save);
-        onPressed = () {
+        widget.onPressed = () async {
           logger.d("save new note button pressed");
+
+          await widget.submitAction();
+          // await widget.submitAction(widget.note);
+          // await viewmodel.
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
           // );
           // context.push('/todo');
-          context.go('/');
+          // context.go('/');
         };
         break;
       case "view":
         titleText = "View a Note";
         actionButtonIcon = Icon(Icons.edit);
-        onPressed = () {
+        widget.onPressed = () {
           logger.d("edit note button pressed");
           setState(() {
             actionButtonIcon = Icon(Icons.save);
 
-            onPressed = () {
+            widget.onPressed = () {
               logger.d("save modified note button pressed");
               context.go('/');
             };
@@ -64,7 +70,7 @@ class NotesFormState extends State<NotesForm> {
       default:
         titleText = "Edit a Note";
         actionButtonIcon = Icon(Icons.save);
-        onPressed = () {
+        widget.onPressed = () {
           logger.d("save modified note button pressed");
           context.go('/');
         };
@@ -92,7 +98,7 @@ class NotesFormState extends State<NotesForm> {
         alignment: Alignment.topCenter,
         child: SizedBox(
           width: 1200,
-          height: 700,
+          height: 750,
           child: Form(
             key: widget.formKey,
             child: Column(
@@ -128,14 +134,14 @@ class NotesFormState extends State<NotesForm> {
                 SizedBox(height: 20),
                 SizedBox(
                   width: 1200,
-                  height: 600,
+                  height: 580,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Body"),
+                          Text("Body:"),
                           SizedBox(height: 20),
                           SizedBox(
                             width: 600,
@@ -220,7 +226,7 @@ class NotesFormState extends State<NotesForm> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: onPressed,
+        onPressed: widget.onPressed,
         tooltip: "Save note",
         child: actionButtonIcon,
       ),
