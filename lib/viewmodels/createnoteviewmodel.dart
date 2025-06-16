@@ -14,28 +14,31 @@ class CreateNoteViewModel extends ChangeNotifier {
 
   Note get note => _note;
 
-  Future<void> createNote(Note note) async {
+  Future<void> createNote() async {
+    logger.i("Creating note...");
     Result result = await _repo.createNote(note);
     if (result is Ok) {
-      _note = result.value;
-      titleController.text = _note.title;
-      bodyController.text = _note.body;
+      logger.i("Created note successfully.");
     } else {
       logger.e("error creating note1");
     }
     notifyListeners();
   }
 
-  bool validateAndSave() {
+  Future<bool> validateAndSave() async {
     final form = formKey.currentState;
     if (form!.validate()) {
-      _note = Note(
-        id: 1,
-        title: titleController.text,
-        body: bodyController.text,
-        completed: _note.completed,
-        dateModified: DateTime.now(),
-      );
+      _note.title = titleController.text;
+      _note.body = bodyController.text;
+      _note.dateModified = DateTime.now();
+      await createNote();
+      // _note = Note(
+      //   id: 1,
+      //   title: titleController.text,
+      //   body: bodyController.text,
+      //   completed: _note.completed,
+      //   dateModified: DateTime.now(),
+      // );
       notifyListeners();
       return true;
     }
@@ -44,6 +47,7 @@ class CreateNoteViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    logger.i("dispoesd");
     titleController.dispose();
     super.dispose();
   }

@@ -13,10 +13,10 @@ class TodoDBService {
   final String _baseURL = dotenv.env["BASE_URL"] ?? "http://localhost:3000";
 
   // get a single Todo
-  Future<Result<Map>> getTodo(int id) async {
+  Future<Result<Map>> getTodo(int id, http.Client client) async {
     Note todo;
     try {
-      final response = await http.get(Uri.parse("$_baseURL/todos/$id"));
+      final response = await client.get(Uri.parse("$_baseURL/todos/$id"));
       // logger.d("response statuscode = ${response.statusCode}");
       if (response.statusCode == 200) {
         var x = jsonDecode(response.body)["todo"] as Map<String, dynamic>;
@@ -34,13 +34,17 @@ class TodoDBService {
   }
 
   // get multiple Todos paginated
-  Future<Result<Map>> getTodosPaginated({int? page, int? limit}) async {
+  Future<Result<Map>> getNotesPaginated(
+    http.Client client, {
+    int? page,
+    int? limit,
+  }) async {
     page = page ?? 1;
     limit = limit ?? 10;
     List<Note> todos = [];
 
     try {
-      final response = await http.get(
+      final response = await client.get(
         Uri.parse("$_baseURL/todos/?page=$page&limit=$limit"),
       );
       // logger.d("response statuscode = ${response.statusCode}");
@@ -62,7 +66,8 @@ class TodoDBService {
 
   // search for todo titles
   Future<Result<Map>> searchTodos(
-    String searchString, {
+    String searchString,
+    http.Client client, {
     int? page,
     int? limit,
   }) async {
@@ -71,7 +76,7 @@ class TodoDBService {
     List<Note> todos = [];
 
     try {
-      final response = await http.get(
+      final response = await client.get(
         Uri.parse(
           "$_baseURL/todos/?search=$searchString&page=$page&limit=$limit",
         ),
@@ -92,16 +97,19 @@ class TodoDBService {
   }
 
   // post a single Todo
-  Future<Result<Map>> createTodo(
+  Future<Result<Map>> createNote(
     // String title,
     // String body,
     // DateTime datecreated,
     // String writtenBy,
     Note newTodo,
+    http.Client client,
   ) async {
     try {
-      final response = await http.post(
-        Uri.parse("$_baseURL/todos"),
+      final response = await client.post(
+        // Uri.parse("$_baseURL/todos"),
+        Uri.parse("http://localhost:3000/todos"),
+
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -124,9 +132,13 @@ class TodoDBService {
   }
 
   // put a single Todo
-  Future<Result<Map>> updateTodo(int id, Note newTodo) async {
+  Future<Result<Map>> updateNote(
+    int id,
+    Note newTodo,
+    http.Client client,
+  ) async {
     try {
-      final response = await http.put(
+      final response = await client.put(
         Uri.parse("$_baseURL/todos/$id"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -150,9 +162,9 @@ class TodoDBService {
   }
 
   // delete a single Todo
-  Future<Result<Map>> deleteTodo(int id) async {
+  Future<Result<Map>> deleteTodo(int id, http.Client client) async {
     try {
-      final response = await http.delete(
+      final response = await client.delete(
         Uri.parse("$_baseURL/todos/$id"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

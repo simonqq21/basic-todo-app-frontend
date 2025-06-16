@@ -22,6 +22,7 @@ class NotesForm extends StatefulWidget {
     this.bodyController,
     this.note,
     this.submitAction,
+    // this.onPressed,
   });
 
   @override
@@ -41,7 +42,10 @@ class NotesFormState extends State<NotesForm> {
         widget.onPressed = () async {
           logger.d("save new note button pressed");
 
-          await widget.submitAction();
+          bool result = await widget.submitAction();
+          if (result) {
+            context.go('/');
+          }
           // await widget.submitAction(widget.note);
           // await viewmodel.
           // Navigator.push(
@@ -118,7 +122,7 @@ class NotesFormState extends State<NotesForm> {
                         ),
                         enabled: true,
                         validator: (val) {
-                          if (val == null || val.isEmpty) {
+                          if (val == null || val.isEmpty || val == "") {
                             return 'Please enter the title.';
                           }
                           return null;

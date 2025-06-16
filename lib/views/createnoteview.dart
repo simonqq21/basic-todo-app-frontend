@@ -33,8 +33,16 @@ class CreateNotePageState extends State<CreateNotePage> {
           note: viewmodel.note,
           submitAction: viewmodel.validateAndSave,
           // onPressed: () async {
-          //   logger.i("create note onPressed is a constructor parameter!");
-          //   await viewmodel.createNote(note)
+          //   logger.d("save new note button pressed");
+
+          //   await viewmodel.validateAndSave();
+          //   // await widget.submitAction(widget.note);
+          //   // await viewmodel.
+          //   // Navigator.push(
+          //   //   context,
+          //   //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
+          //   // );
+          //   // context.push('/todo');
           //   context.go('/');
           // },
         );

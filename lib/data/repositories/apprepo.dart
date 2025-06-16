@@ -3,6 +3,7 @@ import 'package:basic_todo_app_frontend/utils/result.dart';
 import '../models/note.dart';
 import '../../utils/logger.dart';
 export '../models/note.dart';
+import 'package:http/http.dart' as http;
 
 class AppRepo {
   TodoDBService todoDbService = TodoDBService();
@@ -11,7 +12,8 @@ class AppRepo {
   Future<Result<List<Note>>> loadNotes(int? page, int? limit) async {
     page = page ?? 1;
     limit = limit ?? 10;
-    Result result = await todoDbService.getTodosPaginated(
+    Result result = await todoDbService.getNotesPaginated(
+      http.Client(),
       page: page,
       limit: limit,
     );
@@ -24,7 +26,7 @@ class AppRepo {
 
   // load todo
   Future<Result<Note>> loadNote(int id) async {
-    Result result = await todoDbService.getTodo(id);
+    Result result = await todoDbService.getTodo(id, http.Client());
     if (result is Ok) {
       Note todo = result.value["todo"];
       return Result.ok(todo);
@@ -35,7 +37,7 @@ class AppRepo {
 
   // create todo
   Future<Result> createNote(Note newTodo) async {
-    Result result = await todoDbService.createTodo(newTodo);
+    Result result = await todoDbService.createNote(newTodo, http.Client());
     if (result is Ok) {
       return Result.ok(null);
     } else {
@@ -45,7 +47,7 @@ class AppRepo {
 
   // edit todo
   Future<Result> editTodo(int id, Note newTodo) async {
-    Result result = await todoDbService.updateTodo(id, newTodo);
+    Result result = await todoDbService.updateNote(id, newTodo, http.Client());
     if (result is Ok) {
       return Result.ok(null);
     } else {
@@ -55,7 +57,7 @@ class AppRepo {
 
   // delete a todo
   Future<Result> deleteNote(int id) async {
-    Result result = await todoDbService.deleteTodo(id);
+    Result result = await todoDbService.deleteTodo(id, http.Client());
     if (result is Ok) {
       return Result.ok(null);
     } else {
