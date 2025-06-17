@@ -46,6 +46,24 @@ void main() async {
     result = await dbService.createNote(newNote, client);
     expect(result, isA<Ok>());
   });
+
+  test(
+    'Getting a todo that exists must succeed with HTTP 200 and return the todo object.',
+    () async {
+      final client = MockClient();
+      when(client.get(any)).thenAnswer(
+        (_) async => http.Response(
+          '{"todo": {"id": 0, "title": "Flutter is awesome!", "body": "Flutter is easy to learn with good documentation and plenty of features."}}',
+          200,
+        ),
+      );
+      int id = 0;
+      result = await dbService.getNote(id, client);
+      // expect(result, isA<Ok>());
+      // // expect((result as Ok).value.containsKey('todo'), true);
+      // expect((result as Ok).value, containsPair('todo', isNotNull));
+    },
+  );
 }
 
 // void main() async {

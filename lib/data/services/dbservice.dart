@@ -13,7 +13,7 @@ class TodoDBService {
   final String _baseURL = dotenv.env["BASE_URL"] ?? "http://localhost:3000";
 
   // get a single Todo
-  Future<Result<Map>> getTodo(int id, http.Client client) async {
+  Future<Result<Map>> getNote(int id, http.Client client) async {
     Note todo;
     try {
       final response = await client.get(Uri.parse("$_baseURL/todos/$id"));

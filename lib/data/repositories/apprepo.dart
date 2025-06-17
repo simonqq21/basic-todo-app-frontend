@@ -26,7 +26,7 @@ class AppRepo {
 
   // load todo
   Future<Result<Note>> loadNote(int id) async {
-    Result result = await todoDbService.getTodo(id, http.Client());
+    Result result = await todoDbService.getNote(id, http.Client());
     if (result is Ok) {
       Note todo = result.value["todo"];
       return Result.ok(todo);

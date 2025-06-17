@@ -25,14 +25,14 @@ class Note {
 
   factory Note.fromJSON(Map<String, dynamic> json) {
     return Note(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       title: json['title'] as String,
       body: json['body'] as String,
       dateModified: DateTime.fromMillisecondsSinceEpoch(
-        int.parse(json['updated_at_ts']),
+        int.tryParse(json['updated_at_ts'] ?? "") ?? 0,
       ),
-      writtenBy: json['written_by'] as String,
-      completed: json['completed'] as bool,
+      writtenBy: json['written_by'] as String?,
+      completed: json['completed'] as bool?,
     );
   }
 
