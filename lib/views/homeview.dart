@@ -369,8 +369,9 @@ class _TodoListViewState extends State<TodoListView> {
                                 minimumSize: Size(40, 40),
                                 backgroundColor: Colors.blueAccent,
                               ),
-                              onPressed: () {
-                                context.go('/notes/${note.id}');
+                              onPressed: () async {
+                                await context.push('/notes/${note.id}');
+                                await viewmodel.loadNotes();
                               },
                             ),
                             Visibility(

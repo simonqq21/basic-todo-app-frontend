@@ -1,3 +1,5 @@
+import 'package:basic_note_app_frontend/views/common/commonappbar.dart';
+import 'package:basic_note_app_frontend/views/common/commonfloatingactionbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +30,7 @@ class ViewNotePageState extends State<ViewNotePage> {
     ViewNoteViewModel viewmodel = context.read();
     viewmodel.note.id = widget.id;
     logger.i("create todo view model id = ${viewmodel.note.id}");
-    viewmodel.loadTodo(viewmodel.note.id);
+    viewmodel.loadNote(viewmodel.note.id);
     super.initState();
   }
 
@@ -36,12 +38,29 @@ class ViewNotePageState extends State<ViewNotePage> {
   Widget build(BuildContext context) {
     return Consumer<ViewNoteViewModel>(
       builder: (context, viewmodel, child) {
-        return NotesForm(
-          mode: "view",
-          formKey: viewmodel.formKey,
-          bodyController: viewmodel.bodyController,
-          titleController: viewmodel.titleController,
-          note: viewmodel.note,
+        return Scaffold(
+          appBar: NotesFormAppBar(title: "View NOte"),
+          body: NotesForm(
+            mode: 'view',
+            formKey: viewmodel.formKey,
+            titleController: viewmodel.titleController,
+            bodyController: viewmodel.bodyController,
+            note: viewmodel.note,
+          ),
+          // Container(
+          //   child: SizedBox(height: 100, width: 100, child: Text("abcxyz")),
+          // ),
+          floatingActionButton: NotesFormFloatingActionButton(
+            onPressed: () async {
+              bool result = await viewmodel.validateAndSave();
+              if (result) {
+                context.pop();
+              }
+              logger.i("vavavavava");
+            },
+            tooltip: 'Edit note',
+            icon: Icons.edit,
+          ),
         );
       },
     );

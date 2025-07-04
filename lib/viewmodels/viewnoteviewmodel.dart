@@ -14,7 +14,7 @@ class ViewNoteViewModel extends ChangeNotifier {
 
   Note get note => _note;
 
-  Future<void> loadTodo(int id) async {
+  Future<void> loadNote(int id) async {
     Result result = await _repo.loadNote(id);
     if (result is Ok) {
       _note = result.value;
