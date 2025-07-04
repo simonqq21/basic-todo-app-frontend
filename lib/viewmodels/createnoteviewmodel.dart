@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:basic_todo_app_frontend/utils/logger.dart';
-import 'package:basic_todo_app_frontend/data/repositories/apprepo.dart';
-import 'package:basic_todo_app_frontend/utils/result.dart';
+import 'package:basic_note_app_frontend/utils/logger.dart';
+import 'package:basic_note_app_frontend/data/repositories/apprepo.dart';
+import 'package:basic_note_app_frontend/utils/result.dart';
 
 class CreateNoteViewModel extends ChangeNotifier {
   final AppRepo _repo = AppRepo();
@@ -10,23 +10,13 @@ class CreateNoteViewModel extends ChangeNotifier {
   final bodyController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  Note _note = Note(title: "", body: "");
+  final Note _note = Note(title: "", body: "");
 
   Note get note => _note;
 
-  Future<void> createNote() async {
-    logger.i("Creating note...");
-    Result result = await _repo.createNote(note);
-    if (result is Ok) {
-      logger.i("Created note successfully.");
-    } else {
-      logger.e("error creating note1");
-    }
-    notifyListeners();
-  }
-
   Future<bool> validateAndSave() async {
     final form = formKey.currentState;
+    logger.i("validateAndSave");
     if (form!.validate()) {
       _note.title = titleController.text;
       _note.body = bodyController.text;
@@ -42,7 +32,19 @@ class CreateNoteViewModel extends ChangeNotifier {
       notifyListeners();
       return true;
     }
+    logger.e("error: {e}");
     return false;
+  }
+
+  Future<void> createNote() async {
+    logger.i("Creating note...");
+    Result result = await _repo.createNote(note);
+    if (result is Ok) {
+      logger.i("Created note successfully.");
+    } else {
+      logger.e("error creating note1");
+    }
+    notifyListeners();
   }
 
   @override

@@ -2,7 +2,8 @@
 
 class Note {
   int _id = 0;
-  DateTime _dateModified;
+  DateTime _createdAt;
+  DateTime _updatedAt;
   String _title = "";
   String _body = "";
   String _writtenBy = "";
@@ -12,6 +13,7 @@ class Note {
   Note({
     required String title,
     required String body,
+    DateTime? dateCreated,
     DateTime? dateModified,
     String? writtenBy,
     bool? completed,
@@ -19,7 +21,8 @@ class Note {
   }) : _id = id ?? -1,
        _title = title,
        _body = body,
-       _dateModified = dateModified ?? DateTime(2025),
+       _createdAt = dateCreated ?? DateTime.now(),
+       _updatedAt = dateModified ?? DateTime.now(),
        _writtenBy = writtenBy ?? "default",
        _completed = completed ?? false;
 
@@ -28,9 +31,11 @@ class Note {
       id: json['id'] as int?,
       title: json['title'] as String,
       body: json['body'] as String,
-      dateModified: DateTime.fromMillisecondsSinceEpoch(
-        int.tryParse(json['updated_at_ts'] ?? "") ?? 0,
-      ),
+      // dateModified: DateTime.fromMillisecondsSinceEpoch(
+      //   int.tryParse(json['updated_at_ts'] ?? "") ?? 0,
+      // ),
+      dateCreated: DateTime.tryParse(json['createdAt']),
+      dateModified: DateTime.tryParse(json['updatedAt']),
       writtenBy: json['written_by'] as String?,
       completed: json['completed'] as bool?,
     );
@@ -41,9 +46,9 @@ class Note {
     _id = value;
   }
 
-  DateTime get dateModified => _dateModified;
+  DateTime get dateModified => _updatedAt;
   set dateModified(DateTime value) {
-    _dateModified = dateModified;
+    _updatedAt = dateModified;
   }
 
   String get title => _title;

@@ -1,10 +1,10 @@
-import 'package:basic_todo_app_frontend/viewmodels/viewnoteviewmodel.dart';
+import 'package:basic_note_app_frontend/viewmodels/viewnoteviewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:basic_todo_app_frontend/utils/logger.dart';
+import 'package:basic_note_app_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:basic_todo_app_frontend/viewmodels/homeviewmodel.dart';
-import 'package:basic_todo_app_frontend/data/models/note.dart';
+import 'package:basic_note_app_frontend/viewmodels/homeviewmodel.dart';
+import 'package:basic_note_app_frontend/data/models/note.dart';
 import 'common.dart';
 
 // class for viewing a list of all todos paginated
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
-      builder: (BuildContext context, HomeViewModel value, Widget? child) {
+      builder: (BuildContext context, HomeViewModel viewmodel, Widget? child) {
         return Scaffold(
           appBar: AppBar(
             title: Center(child: Text("Simonqq21's notes app yeehaw")),
@@ -42,14 +42,17 @@ class HomePage extends StatelessWidget {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
+            onPressed: () async {
               logger.d("add todo button pressed");
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
               // );
               // context.push('/todo');
-              context.go('/notes/create');
+              // context.go('/notes/create');
+              await context.push('/notes/create');
+              await viewmodel.loadNotes();
+              logger.i("asdfghjkl");
             },
             tooltip: "create a note",
             child: const Icon(Icons.add),
@@ -142,7 +145,44 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
               visible: viewmodel.selectVisibility,
               child: TextButton(
                 onPressed: () {
-                  logger.i("delete pressed");
+                  logger.i("show delete dialog");
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Confirm delete"),
+                        content: Text(
+                          "Are you sure you want to delete the selected notes?",
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              logger.i("delete cancelled");
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              logger.i("delete confirmed");
+                              for (var note in viewmodel.notes) {
+                                if (note.selected) {
+                                  await viewmodel.deleteNote(note.id);
+                                }
+                                // logger.i('${note.title} ${note.id}');
+                              }
+                            },
+                            child: Text("Delete"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll<Color>(Colors.red),

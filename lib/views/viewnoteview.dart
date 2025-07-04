@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:basic_todo_app_frontend/utils/logger.dart';
-import 'package:basic_todo_app_frontend/views/common.dart';
-import 'package:basic_todo_app_frontend/viewmodels/viewnoteviewmodel.dart';
-import 'package:basic_todo_app_frontend/views/common/noteform.dart';
+import 'package:basic_note_app_frontend/utils/logger.dart';
+import 'package:basic_note_app_frontend/views/common.dart';
+import 'package:basic_note_app_frontend/viewmodels/viewnoteviewmodel.dart';
+import 'package:basic_note_app_frontend/views/common/noteform.dart';
 
 /// class for viewing a single todo
 class ViewNotePage extends StatefulWidget {

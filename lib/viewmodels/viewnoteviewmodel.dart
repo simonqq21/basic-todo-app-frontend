@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:basic_todo_app_frontend/utils/logger.dart';
-import 'package:basic_todo_app_frontend/data/repositories/apprepo.dart';
-import 'package:basic_todo_app_frontend/utils/result.dart';
+import 'package:basic_note_app_frontend/utils/logger.dart';
+import 'package:basic_note_app_frontend/data/repositories/apprepo.dart';
+import 'package:basic_note_app_frontend/utils/result.dart';
 
 class ViewNoteViewModel extends ChangeNotifier {
   final AppRepo _repo = AppRepo();
@@ -29,7 +29,6 @@ class ViewNoteViewModel extends ChangeNotifier {
   bool validateAndSave() {
     final form = formKey.currentState;
     if (form!.validate()) {
-      logger.i("mnopqr");
       _note = Note(id: 1, title: titleController.text, body: "body123");
       notifyListeners();
       return true;

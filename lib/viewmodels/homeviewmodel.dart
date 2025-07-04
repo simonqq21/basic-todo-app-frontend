@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:collection';
-import 'package:basic_todo_app_frontend/data/repositories/apprepo.dart';
-import 'package:basic_todo_app_frontend/utils/logger.dart';
-import 'package:basic_todo_app_frontend/utils/result.dart';
+import 'package:basic_note_app_frontend/data/repositories/apprepo.dart';
+import 'package:basic_note_app_frontend/utils/logger.dart';
+import 'package:basic_note_app_frontend/utils/result.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final AppRepo _repo = AppRepo();
@@ -50,7 +50,6 @@ class HomeViewModel extends ChangeNotifier {
     Result result = await _repo.deleteNote(id);
     if (result is Ok) {
       logger.i('success deleting note');
-      _notes = result.value;
     } else {
       logger.e("error deleting note");
     }
