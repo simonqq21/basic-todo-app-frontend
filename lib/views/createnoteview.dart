@@ -41,8 +41,12 @@ class CreateNotePageState extends State<CreateNotePage> {
           floatingActionButton: NotesFormFloatingActionButton(
             onPressed: () async {
               bool result = await viewmodel.validateAndSave();
+
               if (result) {
                 context.pop();
+                viewmodel.note.completed = false;
+                viewmodel.titleController.text = "";
+                viewmodel.bodyController.text = "";
               }
               logger.i("vavavavava");
             },

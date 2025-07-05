@@ -21,24 +21,20 @@ class HomePage extends StatelessWidget {
           body: Container(
             padding: EdgeInsets.only(top: 25),
             alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: 1000,
-              height: 900,
-              child: Column(
-                children: [
-                  TodoTableHeaderBar(),
-                  SizedBox(height: 20),
-                  TodoListView(),
-                  SizedBox(height: 20),
-                  PaginationFooter(),
-                  SizedBox(height: 20),
-                  // Text("Home page"),
-                  // ElevatedButton(
-                  //   onPressed: () => context.go('/todo'),
-                  //   child: const Text('Go to the todos screen'),
-                  // ),
-                ],
-              ),
+            child: Column(
+              children: [
+                TodoTableHeaderBar(),
+                SizedBox(height: 20),
+                NoteListView(),
+                SizedBox(height: 20),
+                PaginationFooter(),
+                SizedBox(height: 20),
+                // Text("Home page"),
+                // ElevatedButton(
+                //   onPressed: () => context.go('/todo'),
+                //   child: const Text('Go to the todos screen'),
+                // ),
+              ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
@@ -200,14 +196,15 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
   }
 }
 
-class TodoListView extends StatefulWidget {
-  const TodoListView({super.key});
+class NoteListView extends StatefulWidget {
+  const NoteListView({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TodoListViewState();
+  State<StatefulWidget> createState() => _NoteListViewState();
 }
 
-class _TodoListViewState extends State<TodoListView> {
+class _NoteListViewState extends State<NoteListView> {
+  final ScrollController verticalSC = ScrollController();
   // var todoItems = [
   //   {
   //     'index': 0,
@@ -242,181 +239,88 @@ class _TodoListViewState extends State<TodoListView> {
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
       builder: (context, viewmodel, child) {
-        // for (var todo in viewmodel.todos) {
-        // }
         return SizedBox(
           width: 1000,
           height: 700,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Table(
-              // border: TableBorder(
-              //   horizontalInside: BorderSide(width: 2, color: Colors.red),
-              // ),
-              columnWidths: {
-                0: FixedColumnWidth(50),
-                1: FlexColumnWidth(2),
-                2: FlexColumnWidth(7),
-                3: FlexColumnWidth(1.5),
-                4: FixedColumnWidth(80),
-              },
-              children: [
-                TableRow(
-                  // decoration: BoxDecoration(color: Colors.green),
-                  children: [
-                    // Center(
-                    //   heightFactor: 2,
-                    //   child: Container(
-                    //     color: Colors.blue,
-                    //     width: 10,
-                    //     height: 10,
-                    //   ),
-                    // ),
-                    Container(
-                      color: Colors.blue,
-                      child: Text(
-                        " ",
-                        textAlign: TextAlign.center,
-                        style: globalTextStyle,
-                      ),
-                    ),
-                    Container(
-                      color: Colors.red,
-                      child: Text(
-                        "Modified",
-                        textAlign: TextAlign.center,
-                        style: globalTextStyle,
-                      ),
-                    ),
-                    Container(
-                      color: Colors.yellow,
-                      child: Text(
-                        "Title",
-                        textAlign: TextAlign.center,
-                        style: globalTextStyle,
-                      ),
-                    ),
-                    Container(
-                      color: Colors.green,
+          child: Center(
+            child: Scrollbar(
+              controller: verticalSC,
+              thumbVisibility: true,
+              trackVisibility: true,
+              child: ListView.builder(
+                controller: verticalSC,
+                itemCount: viewmodel.notes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    color: Colors.lightGreen,
+                    child: Center(
+                      child: ListTile(
+                        // tileColor: Colors.lightGreen, // setting tileColor will make the corners sharp!
+                        leading: SizedBox(
+                          width: 50,
+                          child: Row(
+                            children: [
+                              Text((viewmodel.notes[index].id).toString()),
+                            ],
+                          ),
+                        ),
 
-                      child: Text(
-                        "Completed",
-                        textAlign: TextAlign.center,
-                        style: globalTextStyle,
-                      ),
-                    ),
-                    Container(
-                      color: Colors.blue,
-                      child: Text(
-                        " ",
-                        textAlign: TextAlign.center,
-                        style: globalTextStyle,
-                      ),
-                    ),
-                  ],
-                ),
-                for (var note in viewmodel.notes)
-                  TableRow(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red),
-                    ),
-                    children: [
-                      Container(
-                        height: 60,
-                        alignment: Alignment.center,
-                        child: Text(
-                          note.id.toString(),
-                          textAlign: TextAlign.center,
-                          style: globalTextStyle,
-                        ),
-                      ),
-                      Container(
-                        height: 60,
-                        alignment: Alignment.center,
-                        child: Text(
-                          note.dateModified.toString(),
-                          textAlign: TextAlign.center,
-                          style: globalTextStyle,
-                        ),
-                      ),
-                      Container(
-                        height: 60,
-                        alignment: Alignment.center,
-                        child: Text(
-                          note.title.toString(),
-                          style: globalTextStyle,
-                        ),
-                      ),
-                      Container(
-                        height: 60,
-                        alignment: Alignment.center,
-                        child: Text(
-                          note.completedString,
-                          textAlign: TextAlign.center,
-                          style: globalTextStyle,
-                        ),
-                      ),
-                      Container(
-                        height: 60,
-                        // color: Colors.deepPurple,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              style: IconButton.styleFrom(
-                                minimumSize: Size(40, 40),
-                                backgroundColor: Colors.blueAccent,
+                        title: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // SizedBox(width: 10),
+                              Text(
+                                (viewmodel.notes[index].dateModified)
+                                    .toIso8601String(),
                               ),
-                              onPressed: () async {
-                                await context.push('/notes/${note.id}');
-                                await viewmodel.loadNotes();
-                              },
-                            ),
-                            Visibility(
-                              visible: viewmodel.selectVisibility,
-                              child: Checkbox(
-                                value: note.selected,
-                                onChanged: (bool? val) {
-                                  setState(() {
-                                    note.selected = val ?? false;
-                                  });
-                                  logger.i("${note.selected}");
+                              Text(viewmodel.notes[index].title),
+                              Text(viewmodel.notes[index].completedString),
+                              IconButton(
+                                onPressed: () {
+                                  context.push(
+                                    '/notes/${viewmodel.notes[index].id}',
+                                  );
                                 },
+                                icon: Icon(Icons.edit),
                               ),
-                            ),
-                          ],
+                              Visibility(
+                                visible: viewmodel.selectVisibility,
+                                child: Checkbox(
+                                  value: viewmodel.notes[index].selected,
+                                  onChanged: (bool? val) {
+                                    logger.i(val);
+                                    viewmodel.notes[index].selected = val;
+                                    viewmodel.notifyListeners();
+                                  },
+                                ),
+                              ),
+                              // SizedBox(width: 10),
+                            ],
+                          ),
                         ),
+                        // trailing: Center(child: Row()),
+                        // minVerticalPadding: 10.0,
                       ),
-                    ],
-                  ),
-                // logger.i('ddd');
-
-                // TableRow(children: [Text("5"), Text("6"), Text("7"), Text("8")]),
-                // TableRow(children: [Text("1"), Text("2"), Text("3"), Text("4")]),
-                // TableRow(children: [Text("1"), Text("2"), Text("3"), Text("4")]),
-                // TableRow(children: [Text("1"), Text("2"), Text("3"), Text("4")]),
-              ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );
       },
+
+      //
+
+      //           );
+      //         },)
+      //       ));
+
+      //       ),
+      //     ),
+      //   },
     );
-    // return SizedBox(
-    //   height: 500,
-    //   width: 600,
-    //   child: ListView(
-    //     children: [
-    //       Text("Todo Listview"),
-    //       for (var todoItem in todoItems)
-    //         ListTile(
-    //           leading: Text(todoItem["index"].toString()),
-    //           title: Text((todoItem["title"] as String)),
-    //         ),
-    //     ],
-    //   ),
-    // );
   }
 }
 
@@ -430,6 +334,7 @@ class PaginationFooter extends StatelessWidget {
       children: [
         IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_back)),
         Text("Page 1 of 10"),
+
         IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_forward)),
       ],
     );
