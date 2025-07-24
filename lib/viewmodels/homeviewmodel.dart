@@ -11,8 +11,40 @@ class HomeViewModel extends ChangeNotifier {
   int _page;
   int _limit;
   bool _selectVisibility = false;
+  final pageInputController = TextEditingController();
+  final limitInputController = TextEditingController();
+  final pageInputFocusNode = FocusNode();
+  final limitInputFocusNode = FocusNode();
 
-  HomeViewModel({int page = 1, int limit = 10}) : _limit = limit, _page = page;
+  HomeViewModel({int page = 1, int limit = 10}) : _limit = limit, _page = page {
+    updateLimitInput();
+    updatePageInput();
+    pageInputFocusNode.addListener(() {
+      if (!pageInputFocusNode.hasFocus) {
+        logger.i('page lost focus ${pageInputController.text}');
+        _page = int.tryParse(pageInputController.text) ?? 1;
+        loadNotes();
+      }
+    });
+
+    limitInputFocusNode.addListener(() {
+      if (!limitInputFocusNode.hasFocus) {
+        logger.i('limit lost focus ${limitInputController.text}');
+        _limit = int.tryParse(limitInputController.text) ?? 10;
+        loadNotes();
+      }
+    });
+  }
+
+  void updatePageInput() {
+    pageInputController.text = _page.toString();
+    loadNotes();
+  }
+
+  void updateLimitInput() {
+    limitInputController.text = _limit.toString();
+    loadNotes();
+  }
 
   bool get selectVisibility => _selectVisibility;
   set selectVisibility(val) {
@@ -34,7 +66,7 @@ class HomeViewModel extends ChangeNotifier {
 
   List<Note> get notes => _notes;
   // load todos paginated
-  Future<void> loadNotes({int page = 1, int limit = 10}) async {
+  Future<void> loadNotes() async {
     Result result = await _repo.loadNotes(page, limit);
     if (result is Ok) {
       logger.i('success loading notes');
@@ -53,7 +85,7 @@ class HomeViewModel extends ChangeNotifier {
     } else {
       logger.e("error deleting note");
     }
-    await loadNotes(page: _page, limit: _limit);
+    loadNotes();
     notifyListeners();
   }
 

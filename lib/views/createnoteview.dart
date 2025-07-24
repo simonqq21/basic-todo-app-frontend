@@ -54,7 +54,16 @@ class CreateNotePageState extends State<CreateNotePage> {
                         content: Text("Note created successfully."),
                         actions: [
                           TextButton(
-                            onPressed: () => context.go('/'),
+                            onPressed: () {
+                              // context.go('/');
+                              while (context.canPop()) {
+                                context.pop();
+                              }
+                              context.push('/');
+                              while (context.canPop()) {
+                                context.pop();
+                              }
+                            },
                             child: Text("Ok"),
                           ),
                         ],

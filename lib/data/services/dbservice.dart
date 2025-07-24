@@ -117,8 +117,8 @@ class NoteDBService {
           'title': newNote.title,
           'body': newNote.body,
           'completed': newNote.completed,
-          'createdAt': newNote.createdAt,
-          'updatedAt': newNote.updatedAt,
+          'createdAt': newNote.createdAt.toIso8601String(),
+          'updatedAt': newNote.updatedAt.toIso8601String(),
           'written_by': newNote.writtenBy,
         }),
       );

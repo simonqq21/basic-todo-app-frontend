@@ -1,6 +1,7 @@
 import 'package:basic_note_app_frontend/viewmodels/viewnoteviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_note_app_frontend/utils/logger.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:basic_note_app_frontend/viewmodels/homeviewmodel.dart';
@@ -242,7 +243,7 @@ class _NoteListViewState extends State<NoteListView> {
       builder: (context, viewmodel, child) {
         return SizedBox(
           width: 1000,
-          height: 700,
+          height: 660,
           child: Center(
             child: Scrollbar(
               controller: verticalSC,
@@ -330,26 +331,75 @@ class PaginationFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_back)),
-        Text("Page 1 of 10"),
-        // TextField(
-        //   keyboardType: TextInputType.number,
-        //   decoration: InputDecoration(
-        //     labelText: "input a number",
-        //     border: OutlineInputBorder(),
-        //   ),
-        //   onChanged: (value) {
-        //     final number = int.tryParse(value);
-        //     if (number != null) {
-        //       logger.i('Entered number $number.');
-        //     }
-        //   },
-        // ),
-        IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_forward)),
-      ],
+    return Consumer<HomeViewModel>(
+      builder: (BuildContext context, viewmodel, Widget? child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                if (viewmodel.page > 1) viewmodel.page--;
+                viewmodel.updatePageInput();
+              },
+              icon: Icon(Icons.arrow_back),
+            ),
+            Text("Page"), SizedBox(width: 10),
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: TextField(
+                controller: viewmodel.pageInputController,
+                focusNode: viewmodel.pageInputFocusNode,
+                // maxLength: 4,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Text("of"),
+            // TextField(
+            //   keyboardType: TextInputType.number,
+            //   decoration: InputDecoration(
+            //     labelText: "input a number",
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   onChanged: (value) {
+            //     final number = int.tryParse(value);
+            //     if (number != null) {
+            //       logger.i('Entered number $number.');
+            //     }
+            //   },
+            // ),
+            IconButton(
+              onPressed: () {
+                viewmodel.page++;
+                viewmodel.updatePageInput();
+              },
+              icon: Icon(Icons.arrow_forward),
+            ),
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: TextField(
+                controller: viewmodel.limitInputController,
+                focusNode: viewmodel.limitInputFocusNode,
+                // maxLength: 4,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Text("items"),
+          ],
+        );
+      },
     );
   }
 }
