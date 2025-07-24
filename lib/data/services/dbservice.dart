@@ -116,9 +116,10 @@ class NoteDBService {
         body: jsonEncode(<String, dynamic>{
           'title': newNote.title,
           'body': newNote.body,
-          // 'dateCreated': datecreated.toIso8601String(),
-          'written_by': newNote.writtenBy,
           'completed': newNote.completed,
+          'createdAt': newNote.createdAt,
+          'updatedAt': newNote.updatedAt,
+          'written_by': newNote.writtenBy,
         }),
       );
       if (response.statusCode == 201) {
@@ -147,7 +148,9 @@ class NoteDBService {
         body: jsonEncode(<String, dynamic>{
           'title': newNote.title,
           'body': newNote.body,
-          // 'dateCreated': datecreated.toIso8601String(),
+          'completed': newNote.completed,
+          'createdAt': newNote.createdAt.toIso8601String(),
+          'updatedAt': newNote.updatedAt.toIso8601String(),
           'written_by': newNote.writtenBy,
         }),
       );

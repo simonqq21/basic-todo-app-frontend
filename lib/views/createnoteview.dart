@@ -43,10 +43,23 @@ class CreateNotePageState extends State<CreateNotePage> {
               bool result = await viewmodel.validateAndSave();
 
               if (result) {
-                context.pop();
                 viewmodel.note.completed = false;
                 viewmodel.titleController.text = "";
                 viewmodel.bodyController.text = "";
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: Text("Create note success"),
+                        content: Text("Note created successfully."),
+                        actions: [
+                          TextButton(
+                            onPressed: () => context.go('/'),
+                            child: Text("Ok"),
+                          ),
+                        ],
+                      ),
+                );
               }
               logger.i("vavavavava");
             },

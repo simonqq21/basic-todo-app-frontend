@@ -231,6 +231,7 @@ class _NoteListViewState extends State<NoteListView> {
   @override
   void initState() {
     HomeViewModel viewmodel = context.read();
+    logger.i("loaded notes after popping context");
     viewmodel.loadNotes();
     super.initState();
   }
@@ -271,7 +272,7 @@ class _NoteListViewState extends State<NoteListView> {
                             children: [
                               // SizedBox(width: 10),
                               Text(
-                                (viewmodel.notes[index].dateModified)
+                                (viewmodel.notes[index].updatedAt)
                                     .toIso8601String(),
                               ),
                               Text(viewmodel.notes[index].title),
@@ -334,7 +335,19 @@ class PaginationFooter extends StatelessWidget {
       children: [
         IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_back)),
         Text("Page 1 of 10"),
-
+        // TextField(
+        //   keyboardType: TextInputType.number,
+        //   decoration: InputDecoration(
+        //     labelText: "input a number",
+        //     border: OutlineInputBorder(),
+        //   ),
+        //   onChanged: (value) {
+        //     final number = int.tryParse(value);
+        //     if (number != null) {
+        //       logger.i('Entered number $number.');
+        //     }
+        //   },
+        // ),
         IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_forward)),
       ],
     );

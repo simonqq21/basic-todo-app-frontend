@@ -18,13 +18,6 @@ class ViewNotePage extends StatefulWidget {
 }
 
 class ViewNotePageState extends State<ViewNotePage> {
-  // bool? v1 = false;
-
-  // SingleTodoPageState() {
-  //   CreateTodoViewModel viewmodel = context.read();
-  //   viewmodel.todo.id = id;
-  // }
-
   @override
   void initState() {
     ViewNoteViewModel viewmodel = context.read();
@@ -52,11 +45,8 @@ class ViewNotePageState extends State<ViewNotePage> {
           // ),
           floatingActionButton: NotesFormFloatingActionButton(
             onPressed: () async {
-              bool result = await viewmodel.validateAndSave();
-              if (result) {
-                context.pop();
-              }
-              logger.i("vavavavava");
+              context.push('/notes/${viewmodel.note.id}/edit');
+              // logger.i("vavavavava");
             },
             tooltip: 'Edit note',
             icon: Icons.edit,

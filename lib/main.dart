@@ -1,18 +1,17 @@
 // import 'dart:collection';
-import 'package:basic_note_app_frontend/viewmodels/createnoteviewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:basic_note_app_frontend/viewmodels/homeviewmodel.dart';
 import 'package:basic_note_app_frontend/views/homeview.dart';
-
-import 'package:basic_note_app_frontend/views/viewnoteview.dart';
 import 'package:basic_note_app_frontend/viewmodels/viewnoteviewmodel.dart';
+import 'package:basic_note_app_frontend/views/viewnoteview.dart';
+import 'package:basic_note_app_frontend/viewmodels/createnoteviewmodel.dart';
+import 'package:basic_note_app_frontend/views/createnoteview.dart';
+import 'package:basic_note_app_frontend/viewmodels/editnoteviewmodel.dart';
+import 'package:basic_note_app_frontend/views/editnoteview.dart';
 import 'utils/logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'package:basic_note_app_frontend/views/createnoteview.dart';
 
 Future main() async {
   // runApp(MyApp());
@@ -24,6 +23,7 @@ Future main() async {
         ChangeNotifierProvider(create: (context) => HomeViewModel()),
         ChangeNotifierProvider(create: (context) => CreateNoteViewModel()),
         ChangeNotifierProvider(create: (context) => ViewNoteViewModel()),
+        ChangeNotifierProvider(create: (context) => EditNoteViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -49,6 +49,12 @@ class MyApp extends StatelessWidget {
         builder:
             (context, state) =>
                 ViewNotePage(id: int.parse(state.pathParameters['id'] ?? "")),
+      ),
+      GoRoute(
+        path: '/notes/:id/edit',
+        builder:
+            (context, state) =>
+                EditNotePage(id: int.parse(state.pathParameters['id'] ?? "")),
       ),
     ],
   );

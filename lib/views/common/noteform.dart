@@ -11,6 +11,8 @@ class NotesForm extends StatefulWidget {
   final TextEditingController titleController;
   final TextEditingController bodyController;
   final Note note;
+  final bool readOnly;
+  // late final bool inputsEnabled;
 
   NotesForm({
     super.key,
@@ -19,7 +21,7 @@ class NotesForm extends StatefulWidget {
     required this.titleController,
     required this.bodyController,
     required this.note,
-  });
+  }) : readOnly = mode == "view" ? true : false;
 
   @override
   NotesFormState createState() => NotesFormState();
@@ -48,6 +50,7 @@ class NotesFormState extends State<NotesForm> {
           key: widget.formKey,
           child: Column(
             children: [
+              // Note title input
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -61,7 +64,7 @@ class NotesFormState extends State<NotesForm> {
                         border: OutlineInputBorder(),
                         labelText: 'Title',
                       ),
-                      enabled: true,
+                      readOnly: widget.readOnly,
                       validator: (val) {
                         if (val == null || val.isEmpty || val == "") {
                           return 'Please enter the title.';
@@ -77,12 +80,14 @@ class NotesFormState extends State<NotesForm> {
                 ],
               ),
               SizedBox(height: 20),
+
               SizedBox(
                 width: 1200,
                 height: 580,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Note body input
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -92,6 +97,7 @@ class NotesFormState extends State<NotesForm> {
                           width: 600,
                           height: 480,
                           child: TextFormField(
+                            readOnly: widget.readOnly,
                             textAlignVertical: TextAlignVertical.top,
                             expands: true,
                             maxLines: null,
@@ -106,6 +112,7 @@ class NotesFormState extends State<NotesForm> {
                       ],
                     ),
                     SizedBox(width: 20),
+                    // Note completed input
                     Container(
                       color: Colors.blue[300],
                       child: Column(
@@ -125,12 +132,14 @@ class NotesFormState extends State<NotesForm> {
                                 //   logger.i('$val => ${widget.completed}');
                                 // },
                                 onChanged: (bool? val) {
-                                  setState(() {
-                                    widget.note.completed = val ?? false;
-                                  });
-                                  // widget.completed = val;
-                                  // logger.i('$val => ${widget.completed}');
-                                  logger.i('$val => ${widget.note.completed}');
+                                  if (!widget.readOnly) {
+                                    setState(() {
+                                      widget.note.completed = val ?? false;
+                                    });
+                                    logger.i(
+                                      '$val => ${widget.note.completed}',
+                                    );
+                                  }
                                 },
                               ),
                             ],

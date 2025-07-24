@@ -1,6 +1,6 @@
 {
-    "name": "basic_todo_app_frontend",
-    "short_name": "basic_todo_app_frontend",
+    "name": "basic_note_app_frontend",
+    "short_name": "basic_note_app_frontend",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

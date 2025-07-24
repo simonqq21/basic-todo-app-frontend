@@ -20,7 +20,7 @@ class CreateNoteViewModel extends ChangeNotifier {
     if (form!.validate()) {
       _note.title = titleController.text;
       _note.body = bodyController.text;
-      _note.dateModified = DateTime.now();
+      _note.updatedAt = DateTime.now();
       await createNote();
       // _note = Note(
       //   id: 1,
@@ -32,12 +32,13 @@ class CreateNoteViewModel extends ChangeNotifier {
       notifyListeners();
       return true;
     }
-    logger.e("error: {e}");
     return false;
   }
 
   Future<void> createNote() async {
     logger.i("Creating note...");
+    note.createdAt = DateTime.now();
+    note.updatedAt = note.createdAt;
     Result result = await _repo.createNote(note);
     if (result is Ok) {
       logger.i("Created note successfully.");
@@ -51,6 +52,7 @@ class CreateNoteViewModel extends ChangeNotifier {
   void dispose() {
     logger.i("dispoesd");
     titleController.dispose();
+    bodyController.dispose();
     super.dispose();
   }
 }

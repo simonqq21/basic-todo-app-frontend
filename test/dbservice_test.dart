@@ -40,7 +40,7 @@ void main() async {
     newNote = Note(
       title: "Todo 1",
       body: "This is the first note. It should not be deleted",
-      dateModified: DateTime.now(),
+      updatedAt: DateTime.now(),
       writtenBy: "simonque",
     );
     result = await dbService.createNote(newNote, client);
