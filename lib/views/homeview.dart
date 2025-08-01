@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             title: Center(child: Text("Simonqq21's notes app yeehaw")),
           ),
           body: Container(
-            padding: EdgeInsets.only(top: 25),
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 100),
             alignment: Alignment.topCenter,
             child: Column(
               children: [
@@ -30,30 +30,23 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 20),
                 PaginationFooter(),
                 SizedBox(height: 20),
-                // Text("Home page"),
-                // ElevatedButton(
-                //   onPressed: () => context.go('/todo'),
-                //   child: const Text('Go to the todos screen'),
-                // ),
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              logger.d("add todo button pressed");
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const SingleTodoPage()),
-              // );
-              // context.push('/todo');
-              // context.go('/notes/create');
-              await context.push('/notes/create');
-              await viewmodel.loadNotes();
-              logger.i("asdfghjkl");
-            },
-            tooltip: "create a note",
-            child: const Icon(Icons.add),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 20, right: 50),
+            child: FloatingActionButton(
+              onPressed: () async {
+                logger.d("add todo button pressed");
+                await context.push('/notes/create');
+                await viewmodel.loadNotes();
+                logger.i("asdfghjkl");
+              },
+              tooltip: "create a note",
+              child: const Icon(Icons.add),
+            ),
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         );
       },
     );
@@ -65,19 +58,60 @@ class TodoTableHeaderBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(spacing: 0, children: [ActionButtonBar()]);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 0,
+      children: [SizedBox(width: 100), SearchBar(), ActionButtonBar()],
+    );
   }
 }
 
-class ActionButtonBar extends StatefulWidget {
-  const ActionButtonBar({super.key});
-
+class SearchBar extends StatelessWidget {
   @override
-  State<ActionButtonBar> createState() => _ActionButtonBarState();
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Consumer<HomeViewModel>(
+      builder: (context, viewmodel, child) {
+        return SizedBox(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 40,
+                width: 500,
+                child: TextField(
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black54, width: 2),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  logger.i("search btn pressed");
+                },
+                icon: Icon(Icons.search),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
-class _ActionButtonBarState extends State<ActionButtonBar> {
-  var selectVisibility = false;
+class ActionButtonBar extends StatelessWidget {
+  const ActionButtonBar({super.key});
+  final selectVisibility = false;
+  // @override
+  // State<ActionButtonBar> createState() => _ActionButtonBarState();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
@@ -89,14 +123,14 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
               visible: !viewmodel.selectVisibility,
               child: TextButton(
                 // style: ButtonStyle(
-                //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
+                //   backgroundColor: WidgetStatePropertyAll<Color>(
+                //     Colors.black38,
+                //   ),
                 //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
                 // ),
                 onPressed: () {
                   logger.i("Select pressed");
-                  setState(() {
-                    viewmodel.selectVisibility = !viewmodel.selectVisibility;
-                  });
+                  viewmodel.selectVisibility = !viewmodel.selectVisibility;
                   // viewmodel.add();
                 },
                 child: Text("Select", style: globalTextStyle),
@@ -110,12 +144,11 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
                 //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
                 // ),
                 onPressed: () {
-                  setState(() {
-                    viewmodel.selectVisibility = !viewmodel.selectVisibility;
-                    for (Note note in viewmodel.notes) {
-                      note.selected = false;
-                    }
-                  });
+                  viewmodel.selectVisibility = !viewmodel.selectVisibility;
+                  for (Note note in viewmodel.notes) {
+                    note.selected = false;
+                  }
+
                   viewmodel.notifyListeners();
                   logger.i("Unselect pressed");
                 },
@@ -126,11 +159,10 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
               visible: viewmodel.selectVisibility,
               child: TextButton(
                 onPressed: () {
-                  setState(() {
-                    for (Note note in viewmodel.notes) {
-                      note.selected = true;
-                    }
-                  });
+                  for (Note note in viewmodel.notes) {
+                    note.selected = true;
+                  }
+
                   viewmodel.notifyListeners();
                   logger.i("Select All pressed");
                   // viewmodel.removeAll();
@@ -196,6 +228,129 @@ class _ActionButtonBarState extends State<ActionButtonBar> {
     );
   }
 }
+
+// class _ActionButtonBarState extends State<ActionButtonBar> {
+//   var selectVisibility = false;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<HomeViewModel>(
+//       builder: (context, viewmodel, child) {
+//         return Row(
+//           mainAxisAlignment: MainAxisAlignment.end,
+//           children: [
+//             Visibility(
+//               visible: !viewmodel.selectVisibility,
+//               child: TextButton(
+//                 // style: ButtonStyle(
+//                 //   backgroundColor: WidgetStatePropertyAll<Color>(
+//                 //     Colors.black38,
+//                 //   ),
+//                 //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+//                 // ),
+//                 onPressed: () {
+//                   logger.i("Select pressed");
+//                   setState(() {
+//                     viewmodel.selectVisibility = !viewmodel.selectVisibility;
+//                   });
+//                   // viewmodel.add();
+//                 },
+//                 child: Text("Select", style: globalTextStyle),
+//               ),
+//             ),
+//             Visibility(
+//               visible: viewmodel.selectVisibility,
+//               child: TextButton(
+//                 // style: ButtonStyle(
+//                 //   backgroundColor: WidgetStatePropertyAll<Color>(Colors.black38),
+//                 //   foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+//                 // ),
+//                 onPressed: () {
+//                   setState(() {
+//                     viewmodel.selectVisibility = !viewmodel.selectVisibility;
+//                     for (Note note in viewmodel.notes) {
+//                       note.selected = false;
+//                     }
+//                   });
+//                   viewmodel.notifyListeners();
+//                   logger.i("Unselect pressed");
+//                 },
+//                 child: Text("Unselect", style: globalTextStyle),
+//               ),
+//             ),
+//             Visibility(
+//               visible: viewmodel.selectVisibility,
+//               child: TextButton(
+//                 onPressed: () {
+//                   setState(() {
+//                     for (Note note in viewmodel.notes) {
+//                       note.selected = true;
+//                     }
+//                   });
+//                   viewmodel.notifyListeners();
+//                   logger.i("Select All pressed");
+//                   // viewmodel.removeAll();
+//                 },
+//                 child: Text("Select All", style: globalTextStyle),
+//               ),
+//             ),
+//             Visibility(
+//               visible: viewmodel.selectVisibility,
+//               child: TextButton(
+//                 onPressed: () {
+//                   logger.i("show delete dialog");
+//                   showDialog(
+//                     context: context,
+//                     barrierDismissible: false,
+//                     builder: (BuildContext context) {
+//                       return AlertDialog(
+//                         title: Text("Confirm delete"),
+//                         content: Text(
+//                           "Are you sure you want to delete the selected notes?",
+//                         ),
+//                         actions: <Widget>[
+//                           TextButton(
+//                             onPressed: () {
+//                               Navigator.of(context).pop();
+//                               logger.i("delete cancelled");
+//                             },
+//                             child: Text("Cancel"),
+//                           ),
+//                           ElevatedButton(
+//                             style: ElevatedButton.styleFrom(
+//                               backgroundColor: Colors.red,
+//                             ),
+//                             onPressed: () async {
+//                               Navigator.of(context).pop();
+//                               logger.i("delete confirmed");
+//                               for (var note in viewmodel.notes) {
+//                                 if (note.selected) {
+//                                   await viewmodel.deleteNote(note.id);
+//                                 }
+//                                 // logger.i('${note.title} ${note.id}');
+//                               }
+//                             },
+//                             child: Text("Delete"),
+//                           ),
+//                         ],
+//                       );
+//                     },
+//                   );
+//                 },
+//                 style: ButtonStyle(
+//                   backgroundColor: WidgetStatePropertyAll<Color>(Colors.red),
+//                 ),
+//                 child: Text(
+//                   "Delete",
+//                   style: globalTextStyle.merge(TextStyle()),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+// }
 
 class NoteListView extends StatefulWidget {
   const NoteListView({super.key});
@@ -312,16 +467,6 @@ class _NoteListViewState extends State<NoteListView> {
           ),
         );
       },
-
-      //
-
-      //           );
-      //         },)
-      //       ));
-
-      //       ),
-      //     ),
-      //   },
     );
   }
 }
