@@ -42,6 +42,8 @@ class HomeViewModel extends ChangeNotifier {
     searchInputFocusNode.addListener(() {
       if (!searchInputFocusNode.hasFocus) {
         _search = searchInputController.text;
+        this.page = 1;
+
         logger.i('search lost focus $_search');
         if (_search == "") {
           loadNotes();
@@ -76,6 +78,7 @@ class HomeViewModel extends ChangeNotifier {
   int get page => _page;
   set page(int val) {
     _page = val;
+    pageInputController.text = _page.toString();
     notifyListeners();
   }
 

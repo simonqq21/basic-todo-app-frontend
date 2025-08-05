@@ -430,6 +430,7 @@ file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/main.dar
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/utils/logger.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/utils/result.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/viewmodels/createnoteviewmodel.dart
+file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/viewmodels/editnoteviewmodel.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/viewmodels/homeviewmodel.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/viewmodels/viewnoteviewmodel.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/common.dart
@@ -437,6 +438,7 @@ file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/co
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/common/commonfloatingactionbutton.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/common/noteform.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/createnoteview.dart
+file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/editnoteview.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/homeview.dart
 file:///C:/Users/Simon%20Que/Documents/code/basic-todo-app-frontend/lib/views/viewnoteview.dart
 file:///C:/Users/Simon%20Que/Documents/code/flutter/bin/cache/flutter_web_sdk/kernel/dart2js_platform.dill
