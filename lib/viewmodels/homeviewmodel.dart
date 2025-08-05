@@ -10,11 +10,15 @@ class HomeViewModel extends ChangeNotifier {
   List<Note> _notes = [];
   int _page;
   int _limit;
+  String _search = "";
+
   bool _selectVisibility = false;
   final pageInputController = TextEditingController();
   final limitInputController = TextEditingController();
+  final searchInputController = TextEditingController();
   final pageInputFocusNode = FocusNode();
   final limitInputFocusNode = FocusNode();
+  final searchInputFocusNode = FocusNode();
 
   HomeViewModel({int page = 1, int limit = 10}) : _limit = limit, _page = page {
     updateLimitInput();
@@ -34,11 +38,28 @@ class HomeViewModel extends ChangeNotifier {
         loadNotes();
       }
     });
+
+    searchInputFocusNode.addListener(() {
+      if (!searchInputFocusNode.hasFocus) {
+        _search = searchInputController.text;
+        logger.i('search lost focus $_search');
+        if (_search == "") {
+          loadNotes();
+        } else {
+          searchNotes();
+        }
+        // loadNotes();
+      }
+    });
   }
 
   void updatePageInput() {
     pageInputController.text = _page.toString();
-    loadNotes();
+    if (_search == "") {
+      loadNotes();
+    } else {
+      searchNotes();
+    }
   }
 
   void updateLimitInput() {
@@ -64,7 +85,14 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  String get search => _search;
+  set search(String val) {
+    _search = val;
+    notifyListeners();
+  }
+
   List<Note> get notes => _notes;
+
   // load todos paginated
   Future<void> loadNotes() async {
     Result result = await _repo.loadNotes(page, limit);
@@ -75,6 +103,19 @@ class HomeViewModel extends ChangeNotifier {
       logger.e("error loading notes");
     }
     notifyListeners();
+  }
+
+  Future<void> searchNotes() async {
+    if (_search != "") {
+      Result result = await _repo.searchNotes(page, limit, search);
+      if (result is Ok) {
+        logger.i('success searching notes');
+        _notes = result.value;
+      } else {
+        logger.e("error searching notes");
+      }
+      notifyListeners();
+    }
   }
 
   // delete a todo

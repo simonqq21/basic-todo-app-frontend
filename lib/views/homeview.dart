@@ -59,9 +59,9 @@ class TodoTableHeaderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       spacing: 0,
-      children: [SizedBox(width: 100), SearchBar(), ActionButtonBar()],
+      children: [SearchBar(), ActionButtonBar()],
     );
   }
 }
@@ -79,7 +79,7 @@ class SearchBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 40,
+                height: 50,
                 width: 500,
                 child: TextField(
                   decoration: InputDecoration(
@@ -89,12 +89,16 @@ class SearchBar extends StatelessWidget {
                     ),
                     filled: true,
                     fillColor: Colors.white,
+                    labelText: "search a title",
                   ),
+                  controller: viewmodel.searchInputController,
+                  focusNode: viewmodel.searchInputFocusNode,
                 ),
               ),
               IconButton(
                 onPressed: () {
-                  logger.i("search btn pressed");
+                  viewmodel.page = 1;
+                  viewmodel.searchNotes();
                 },
                 icon: Icon(Icons.search),
               ),

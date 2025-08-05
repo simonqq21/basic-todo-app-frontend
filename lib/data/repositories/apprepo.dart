@@ -17,10 +17,32 @@ class AppRepo {
       page: page,
       limit: limit,
     );
+
     if (result is Ok) {
       return Result.ok(result.value["notes"]);
     } else {
       return Result.error(Exception("Error getting notes from db."));
+    }
+  }
+
+  Future<Result<List<Note>>> searchNotes(
+    int? page,
+    int? limit,
+    String? search,
+  ) async {
+    page = page ?? 1;
+    limit = limit ?? 10;
+    search = search ?? "";
+    Result result = await noteDbService.searchNotes(
+      search,
+      http.Client(),
+      page: page,
+      limit: limit,
+    );
+    if (result is Ok) {
+      return Result.ok(result.value["notes"]);
+    } else {
+      return Result.error(Exception("Error searching notes from db."));
     }
   }
 
