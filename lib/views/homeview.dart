@@ -72,6 +72,7 @@ class SearchBar extends StatelessWidget {
     // TODO: implement build
     return Consumer<HomeViewModel>(
       builder: (context, viewmodel, child) {
+        double screenWidth = MediaQuery.of(context).size.width;
         return SizedBox(
           height: 50,
           child: Row(
@@ -80,7 +81,7 @@ class SearchBar extends StatelessWidget {
             children: [
               SizedBox(
                 height: 50,
-                width: 500,
+                width: screenWidth * 0.4,
                 child: TextField(
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -400,9 +401,9 @@ class _NoteListViewState extends State<NoteListView> {
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
       builder: (context, viewmodel, child) {
-        return SizedBox(
-          width: 1000,
-          height: 660,
+        return Expanded(
+          // width: 1000,
+          // height: 660,
           child: Center(
             child: Scrollbar(
               controller: verticalSC,
