@@ -28,7 +28,7 @@ class SingleTodoPageState extends State<SingleTodoPage> {
             alignment: Alignment.topCenter,
             child: SizedBox(
               width: 1200,
-              height: 900,
+              height: 700,
               child: Form(
                 key: viewmodel.formKey,
                 child: Column(
@@ -65,76 +65,99 @@ class SingleTodoPageState extends State<SingleTodoPage> {
                       ],
                     ),
                     SizedBox(height: 20),
+                    SizedBox(
+                      width: 1200,
+                      height: 500,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Body"),
+                              SizedBox(
+                                width: 600,
+                                height: 480,
+                                child: TextFormField(
+                                  textAlignVertical: TextAlignVertical.top,
+                                  expands: true,
+                                  maxLines: null,
+                                  keyboardType: TextInputType.multiline,
+                                  decoration: InputDecoration(
+                                    labelText: 'Body xyz',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 20),
+                          Container(
+                            color: Colors.blue[300],
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Completed: "),
+                                    Checkbox(
+                                      value: viewmodel.todo!.todo!.completed,
+                                      // tristate: true,
+                                      // onChanged: (bool? val) {
+                                      //   // setState(() {});
+                                      //   viewmodel.completed = val;
+                                      //   logger.i('$val => ${viewmodel.completed}');
+                                      // },
+                                      onChanged: (bool? val) {
+                                        setState(() {
+                                          viewmodel.todo!.todo!.completed = val;
+                                        });
+                                        // viewmodel.completed = val;
+                                        // logger.i('$val => ${viewmodel.completed}');
+                                        logger.i(
+                                          '$val => ${viewmodel.todo!.todo!.completed}',
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(
-                          children: [
-                            Text("Body"),
-                            SizedBox(
-                              width: 600,
-                              height: 480,
-                              child: TextFormField(
-                                textAlignVertical: TextAlignVertical.top,
-                                expands: true,
-                                maxLines: null,
-                                keyboardType: TextInputType.multiline,
-                                decoration: InputDecoration(
-                                  labelText: 'Body xyz',
-                                  border: OutlineInputBorder(),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (viewmodel.validateAndSave()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'You entered title ${viewmodel.todo!.todo!.title}!',
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              );
+                            }
+                          },
+                          child: Text('Submit'),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Completed: "),
-                            Checkbox(
-                              value: viewmodel.todo!.todo!.completed,
-                              // tristate: true,
-                              // onChanged: (bool? val) {
-                              //   // setState(() {});
-                              //   viewmodel.completed = val;
-                              //   logger.i('$val => ${viewmodel.completed}');
-                              // },
-                              onChanged: (bool? val) {
-                                setState(() {
-                                  viewmodel.todo!.todo!.completed = val;
-                                });
-                                // viewmodel.completed = val;
-                                // logger.i('$val => ${viewmodel.completed}');
-                                logger.i(
-                                  '$val => ${viewmodel.todo!.todo!.completed}',
-                                );
-                              },
-                            ),
-                          ],
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          // onPressed: () => context.go('/'),
+                          onPressed: () {
+                            // context.pop();
+                            context.go('/');
+                          },
+                          child: const Text('Go to the home screen'),
                         ),
                       ],
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (viewmodel.validateAndSave()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'You entered title ${viewmodel.todo!.todo!.title}!',
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      child: Text('Submit'),
-                    ),
-                    ElevatedButton(
-                      // onPressed: () => context.go('/'),
-                      onPressed: () {
-                        // context.pop();
-                        context.go('/');
-                      },
-                      child: const Text('Go to the home screen'),
                     ),
                   ],
                 ),
